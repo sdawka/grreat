@@ -1,0 +1,9 @@
+/* Dark-mode readiness — ship the file, not the toggle. */
+[data-theme='dark'] {
+  color-scheme: dark;
+  --surface-page: #14130f;   --surface-raised: #1c1b16;  --surface-focus: #262620;
+  --surface-inverse: var(--paper-light);
+  --text-strong: #eae7dc;    --text-muted: #99968b;      --text-inverse: #14130f;
+  --border-strong: #eae7dc;  --border-hair: #3a382f;
+  /* --surface-accent stays yellow: brand accent survives inversion */
+}
