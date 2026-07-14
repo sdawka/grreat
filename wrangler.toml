@@ -5,6 +5,11 @@ compatibility_date = "2025-04-01"
 # Local dev uses a miniflare simulation of this database (state in .wrangler/state).
 # Apply migrations: npm run db:migrate:local / npm run db:migrate:remote
 
+# Astro sessions KV (the adapter injects the SESSION binding; pin the existing namespace)
+[[kv_namespaces]]
+binding = "SESSION"
+id = "13e97905b3984247b3be2694914b7a4d"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "grreat-waitlist"
