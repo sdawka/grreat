@@ -1,0 +1,106 @@
+---
+// Reusable signup form. Each rendered instance initializes independently.
+---
+
+<form class="signup-form" data-signup-form novalidate aria-label="Waitlist signup">
+  <div class="honeypot" aria-hidden="true">
+    <label>Leave this empty
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <span class="sr-only">Email address</span>
+      <input
+        type="email"
+        name="email"
+        placeholder="you@example.com"
+        required
+        autocomplete="email"
+      />
+    </label>
+  </div>
+
+  <button type="submit">Join waitlist</button>
+</form>
+
+<div class="form-message" role="status" aria-live="polite"></div>
+
+<script>
+  interface SignupResponse {
+    success: boolean;
+    message?: string;
+    error?: string;
+  }
+
+  document.querySelectorAll<HTMLFormElement>('[data-signup-form]').forEach((form) => {
+    if (form.dataset.initialized === 'true') return;
+    form.dataset.initialized = 'true';
+
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const messageEl = form.nextElementSibling as HTMLDivElement;
+
+    function setState(
+      state: 'idle' | 'submitting' | 'success' | 'error' | 'duplicate' | 'config-error',
+      message: string,
+    ) {
+      messageEl.textContent = message;
+      messageEl.className = 'form-message';
+      if (state !== 'idle' && state !== 'submitting') messageEl.classList.add(state);
+      submitBtn.disabled = state === 'submitting';
+      emailInput.disabled = state === 'submitting';
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = emailInput.value;
+      const website = form.querySelector<HTMLInputElement>('input[name="website"]')?.value;
+
+      if (!email || email.trim().length === 0) {
+        setState('error', 'Please enter your email address.');
+        emailInput.focus();
+        return;
+      }
+
+      setState('submitting', 'Joining the waitlist…');
+
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email: email.trim(), website }),
+        });
+        const data: SignupResponse = await response.json();
+
+        if (response.status === 200 && data.success) {
+          setState('success', '✓ You are on the list. We’ll be in touch.');
+          emailInput.value = '';
+        } else if (response.status === 409) {
+          setState('duplicate', data.error || 'Already on the list.');
+        } else if (response.status === 503) {
+          setState('config-error', data.error || 'Waitlist is not configured yet.');
+        } else {
+          setState('error', data.error || 'Something went wrong. Please try again.');
+        }
+      } catch {
+        setState('error', 'Network error. Please check your connection and try again.');
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

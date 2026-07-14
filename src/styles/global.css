@@ -1,0 +1,627 @@
+/* GRREAT — The Working Edition (Signup Page)
+   Visual language: warm paper, dense black ink, oversized DM Serif Display,
+   IBM Plex Mono/Sans, numbered Swiss/editorial index, hard rules,
+   high-contrast yellow panel, bucket-specific colors, colophon.
+   See /Users/sdawka/Code/grreat-vault/app/public/styles.css for source.
+*/
+
+/* ── Design tokens ── */
+:root {
+  --paper: #f0ede4;
+  --paper-light: #f8f6ef;
+  --ink: #151513;
+  --muted: #6c6a62;
+  --hair: #b9b5aa;
+  --yellow: #f4e548;
+  --blue: #2448ff;
+  --red: #ef4b3f;
+  --green: #3a8f65;
+  --purple: #9d4edd;
+  --orange: #e15c16;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'IBM Plex Sans', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --bucket: #2448ff;
+  --max-width: 1120px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--blue);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Accessibility: reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* ── Layout shell — single-column for signup, no sidebar ── */
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar / folio ── */
+.topbar {
+  height: 46px;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 28px;
+  font: 9px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.topbar .folio {
+  color: var(--muted);
+}
+
+.topbar .page-no {
+  height: 100%;
+  width: 42px;
+  border-left: 1px solid var(--ink);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+/* ── Masthead / Hero ── */
+.hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 60px 36px 0;
+  width: 100%;
+}
+
+.edition {
+  display: block;
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.wordmark {
+  font: clamp(48px, 8vw, 78px) / 0.83 var(--serif);
+  letter-spacing: -3.5px;
+}
+
+.wordmark .reg {
+  font: 8px var(--mono);
+  vertical-align: top;
+  margin-left: 5px;
+  letter-spacing: 0;
+}
+
+.tagline {
+  font: clamp(16px, 2.5vw, 22px) / 1.3 var(--sans);
+  color: var(--muted);
+  margin-top: 20px;
+  max-width: 680px;
+}
+
+/* ── Hero action area ── */
+.hero-action {
+  margin-top: 42px;
+  border-top: 1px solid var(--ink);
+  padding-top: 32px;
+}
+
+.hero-action .kicker {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font: 9px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 18px;
+}
+
+.hero-action .kicker span:first-child {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5px 7px;
+}
+
+/* ── Signup form ── */
+.signup-form {
+  display: flex;
+  gap: 0;
+  max-width: 520px;
+}
+
+.signup-form .field {
+  flex: 1;
+  position: relative;
+}
+
+.signup-form input[type='email'] {
+  width: 100%;
+  height: 48px;
+  border: 2px solid var(--ink);
+  border-right: 0;
+  background: var(--paper-light);
+  padding: 0 14px;
+  font: 14px var(--sans);
+  transition: background 0.15s;
+}
+
+.signup-form input[type='email']:focus {
+  background: #fff;
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--yellow);
+}
+
+.signup-form input[type='email']::placeholder {
+  color: var(--muted);
+}
+
+.signup-form button {
+  height: 48px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper-light);
+  font: 12px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0 22px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.signup-form button:hover {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.signup-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Form states ── */
+.form-message {
+  margin-top: 12px;
+  font: 11px/1.4 var(--mono);
+}
+
+.form-message.success {
+  color: var(--green);
+}
+
+.form-message.error {
+  color: var(--red);
+}
+
+.form-message.config-error {
+  color: var(--orange);
+}
+
+.form-message.duplicate {
+  color: var(--muted);
+}
+
+/* Honeypot — visually hidden but accessible to bots */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* ── Section styling ── */
+section {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 56px 36px 0;
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 28px;
+}
+
+.section-number {
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  min-width: 50px;
+}
+
+.section-title {
+  font: clamp(28px, 4vw, 48px) / 1.02 var(--serif);
+  letter-spacing: -1.5px;
+  margin: 0;
+}
+
+/* Hard rule above sections */
+.section-rule {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 0 36px;
+}
+
+/* ── Bucket grid ── */
+.bucket-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--hair);
+  border: 1px solid var(--ink);
+}
+
+.bucket-card {
+  background: var(--paper-light);
+  padding: 20px 18px;
+  transition: background 0.15s;
+}
+
+.bucket-card[data-bucket='goals'] { --bucket: var(--red); }
+.bucket-card[data-bucket='research'] { --bucket: var(--blue); }
+.bucket-card[data-bucket='roadmap'] { --bucket: var(--purple); }
+.bucket-card[data-bucket='execution'] { --bucket: var(--orange); }
+.bucket-card[data-bucket='analysis'] { --bucket: var(--green); }
+.bucket-card[data-bucket='time'] { --bucket: var(--ink); }
+
+.bucket-letter {
+  display: block;
+  font: 40px / 0.85 var(--serif);
+  color: var(--bucket);
+  letter-spacing: -2px;
+  margin-bottom: 6px;
+}
+
+.bucket-name {
+  display: block;
+  font: 600 12px / 1.2 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.bucket-desc {
+  font: 12px / 1.55 var(--sans);
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Feedback loop diagram ── */
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding-top: 8px;
+}
+
+@media (max-width: 760px) {
+  .feedback-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+.feedback-side {
+  border: 1px solid var(--ink);
+  padding: 24px;
+  background: var(--paper-light);
+}
+
+.feedback-side h3 {
+  font: 18px var(--serif);
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.feedback-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feedback-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hair);
+  font: 13px / 1.5 var(--sans);
+}
+
+.feedback-list li:last-child {
+  border-bottom: 0;
+}
+
+.feedback-list li .arrow {
+  color: var(--bucket);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.feedback-list li strong {
+  font-weight: 600;
+}
+
+.feedback-list li em {
+  font-style: normal;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* ── Now Card ── */
+.now-card {
+  background: var(--yellow);
+  border: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) 130px;
+  box-shadow: 7px 7px 0 var(--ink);
+  margin-right: 7px;
+}
+
+.now-index {
+  padding: 18px;
+  border-right: 1px solid var(--ink);
+  font: 10px var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.now-index span {
+  font: 40px / 1 var(--serif);
+  letter-spacing: -2px;
+}
+
+.now-copy {
+  padding: 20px 25px;
+}
+
+.now-copy .label {
+  font: 9px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.now-action-text {
+  font: clamp(18px, 2vw, 26px) / 1.18 var(--serif);
+  margin-top: 8px;
+}
+
+.ownership {
+  border-left: 1px solid var(--ink);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ownership .label {
+  font: 9px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.ownership strong {
+  font: 14px var(--mono);
+  text-transform: uppercase;
+}
+
+/* ── Principles list ── */
+.principles-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--ink);
+}
+
+@media (max-width: 760px) {
+  .principles-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.principles-list li {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--hair);
+  border-right: 1px solid var(--hair);
+  font: 13px / 1.5 var(--sans);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.principles-list li:nth-child(even) {
+  border-right: 0;
+}
+
+@media (max-width: 760px) {
+  .principles-list li {
+    border-right: 0;
+  }
+}
+
+.principles-list li:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .principles-list li:last-child {
+    border-bottom: 0;
+  }
+}
+
+.principle-number {
+  font: 9px var(--mono);
+  color: var(--muted);
+  min-width: 20px;
+}
+
+/* ── CTA section ── */
+.cta-section {
+  padding-bottom: 56px;
+}
+
+.cta-section .privacy-note {
+  font: 10px / 1.5 var(--mono);
+  color: var(--muted);
+  margin-top: 14px;
+  max-width: 520px;
+}
+
+/* ── Colophon / Footer ── */
+.colophon {
+  border-top: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 36px;
+  font: 8px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.colophon span {
+  white-space: nowrap;
+}
+
+.colophon a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.colophon a:hover {
+  color: var(--ink);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .bucket-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    padding: 40px 18px 0;
+  }
+
+  .topbar {
+    padding-left: 16px;
+  }
+
+  .topbar .folio {
+    display: none;
+  }
+
+  section {
+    padding: 40px 18px 0;
+  }
+
+  .section-rule {
+    margin: 0 18px;
+  }
+
+  .bucket-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .signup-form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .signup-form input[type='email'] {
+    border-right: 2px solid var(--ink);
+  }
+
+  .signup-form button {
+    width: 100%;
+  }
+
+  .now-card {
+    grid-template-columns: 64px 1fr;
+    box-shadow: 5px 5px 0 var(--ink);
+    margin-right: 5px;
+  }
+
+  .ownership {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--ink);
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .colophon {
+    padding: 10px 18px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 500px) {
+  .bucket-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero .wordmark {
+    font-size: clamp(42px, 15vw, 56px);
+  }
+}

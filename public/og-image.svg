@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f0ede4"/>
+  <rect width="278" height="630" fill="#151513"/>
+  <line x1="278" y1="0" x2="278" y2="630" stroke="#151513"/>
+  <line x1="326" y1="72" x2="1150" y2="72" stroke="#151513"/>
+  <text x="34" y="48" fill="#aaa79d" font-family="monospace" font-size="13" letter-spacing="2">THE WORKING EDITION</text>
+  <text x="30" y="122" fill="#f8f6ef" font-family="Georgia, serif" font-size="74" font-weight="bold">GRREAT</text>
+  <text x="34" y="164" fill="#aaa79d" font-family="Arial, sans-serif" font-size="17">Goals, research, roadmaps,</text>
+  <text x="34" y="188" fill="#aaa79d" font-family="Arial, sans-serif" font-size="17">execution, analysis &amp; time.</text>
+  <text x="326" y="48" fill="#151513" font-family="monospace" font-size="13" letter-spacing="2">VOL. 01 / PUBLIC EDITION</text>
+  <text x="326" y="172" fill="#151513" font-family="Georgia, serif" font-size="84">Every project.</text>
+  <text x="326" y="258" fill="#151513" font-family="Georgia, serif" font-size="84">One clear</text>
+  <text x="326" y="344" fill="#151513" font-family="Georgia, serif" font-size="84">next action.</text>
+  <rect x="326" y="408" width="824" height="132" fill="#f4e548" stroke="#151513"/>
+  <text x="350" y="443" fill="#151513" font-family="monospace" font-size="12" letter-spacing="2">NOW / PRIMARY NEXT ACTION</text>
+  <text x="350" y="492" fill="#151513" font-family="Georgia, serif" font-size="38">Turn intention into a living</text>
+  <text x="350" y="530" fill="#151513" font-family="Georgia, serif" font-size="38">feedback system.</text>
+  <text x="34" y="590" fill="#aaa79d" font-family="monospace" font-size="11" letter-spacing="1">MARKDOWN / GIT / HUMANS + AGENTS</text>
+</svg>

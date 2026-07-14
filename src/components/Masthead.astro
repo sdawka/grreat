@@ -1,0 +1,25 @@
+---
+// Editorial masthead/hero with category line, headline, and email signup CTA
+---
+
+<section class="hero" aria-label="Introduction">
+  <span class="edition">The working edition</span>
+  <h1 class="wordmark">
+    GRREAT<span class="reg">®</span>
+  </h1>
+  <p class="tagline">
+    Goals · Research · Roadmaps · Execution · Analysis &amp; Time.<br />
+    A cyclical feedback operating system for humans and AI agents.
+  </p>
+
+  <div class="hero-action">
+    <div class="kicker">
+      <span>Early access</span>
+      <span>Join the waitlist</span>
+    </div>
+    <p style="font: 13px / 1.5 var(--sans); color: var(--muted); max-width: 520px; margin: 0 0 14px;">
+      Get launch notes, early product access, and practical examples of humans and AI agents running projects together.
+    </p>
+    <slot name="form" />
+  </div>
+</section>

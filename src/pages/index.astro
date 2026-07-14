@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Topbar from '../components/Topbar.astro';
+import Masthead from '../components/Masthead.astro';
+import BucketExplainer from '../components/BucketExplainer.astro';
+import FeedbackLoop from '../components/FeedbackLoop.astro';
+import WorkingSession from '../components/WorkingSession.astro';
+import Principles from '../components/Principles.astro';
+import SignupForm from '../components/SignupForm.astro';
+import SecondaryCTA from '../components/SecondaryCTA.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="GRREAT — The Working Edition"
+  description="Goals, Research, Roadmaps, Execution, Analysis & Time. A cyclical feedback operating system for humans and AI agents. Join the waitlist for early access."
+>
+  <Topbar />
+
+  <Masthead>
+    <SignupForm slot="form" />
+  </Masthead>
+
+  <BucketExplainer />
+
+  <FeedbackLoop />
+
+  <WorkingSession />
+
+  <Principles />
+
+  <SecondaryCTA>
+    <SignupForm slot="form" />
+  </SecondaryCTA>
+
+  <Footer />
+</BaseLayout>

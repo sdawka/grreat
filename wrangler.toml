@@ -1,0 +1,12 @@
+name = "grreat"
+compatibility_date = "2025-04-01"
+
+# D1 Database — Waitlist
+# Local dev uses a miniflare simulation of this database (state in .wrangler/state).
+# Apply migrations: npm run db:migrate:local / npm run db:migrate:remote
+
+[[d1_databases]]
+binding = "DB"
+database_name = "grreat-waitlist"
+database_id = "56835326-b34b-4e0b-9f34-96c709dec266"
+migrations_dir = "migrations"
