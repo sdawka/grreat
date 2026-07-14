@@ -27,6 +27,10 @@
 
 <div class="form-message" role="status" aria-live="polite"></div>
 
+<p class="privacy-note">
+  No spam. We never share your data. Unsubscribe at any time.
+</p>
+
 <script>
   interface SignupResponse {
     success: boolean;
@@ -43,7 +47,7 @@
     const messageEl = form.nextElementSibling as HTMLDivElement;
 
     function setState(
-      state: 'idle' | 'submitting' | 'success' | 'error' | 'duplicate' | 'config-error',
+      state: 'idle' | 'submitting' | 'success' | 'error' | 'config-error',
       message: string,
     ) {
       messageEl.textContent = message;
@@ -78,7 +82,7 @@
           setState('success', '✓ You are on the list. We’ll be in touch.');
           emailInput.value = '';
         } else if (response.status === 409) {
-          setState('duplicate', data.error || 'Already on the list.');
+          setState('success', '✓ You’re already on the list — nothing more to do.');
         } else if (response.status === 503) {
           setState('config-error', data.error || 'Waitlist is not configured yet.');
         } else {

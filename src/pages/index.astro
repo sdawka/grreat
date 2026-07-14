@@ -12,26 +12,28 @@ import Footer from '../components/Footer.astro';
 ---
 
 <BaseLayout
-  title="GRREAT — The Working Edition"
+  title="GRREAT — Project operating system for humans and AI agents"
   description="Goals, Research, Roadmaps, Execution, Analysis & Time. A cyclical feedback operating system for humans and AI agents. Join the waitlist for early access."
 >
   <Topbar />
 
-  <Masthead>
-    <SignupForm slot="form" />
-  </Masthead>
+  <main id="main">
+    <Masthead>
+      <SignupForm slot="form" />
+    </Masthead>
 
-  <BucketExplainer />
+    <BucketExplainer />
 
-  <FeedbackLoop />
+    <FeedbackLoop />
 
-  <WorkingSession />
+    <WorkingSession />
 
-  <Principles />
+    <Principles />
 
-  <SecondaryCTA>
-    <SignupForm slot="form" />
-  </SecondaryCTA>
+    <SecondaryCTA>
+      <SignupForm slot="form" />
+    </SecondaryCTA>
+  </main>
 
   <Footer />
 </BaseLayout>
