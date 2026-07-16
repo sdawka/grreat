@@ -1,6 +1,12 @@
 /// <reference types="vitest" />
-import { describe, it, expect } from 'vitest';
-import { validateEmail, createSignupResponse, handleSignupWithDB } from '../src/lib/signup';
+import { describe, it, expect, vi } from 'vitest';
+import {
+  validateEmail,
+  createSignupResponse,
+  createUnavailableResponse,
+  handleSignupWithDB,
+  SERVICE_UNAVAILABLE_MESSAGE,
+} from '../src/lib/signup';
 
 // ── Unit tests: email validation ──
 
@@ -82,6 +88,37 @@ describe('createSignupResponse', () => {
   it('sets custom status code when provided', () => {
     const res = createSignupResponse({ success: false, message: 'Duplicate' }, 409);
     expect(res.status).toBe(409);
+  });
+});
+
+// ── Unit tests: createUnavailableResponse ──
+
+describe('createUnavailableResponse', () => {
+  it('returns 503 with the generic visitor-facing message', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const res = createUnavailableResponse('DB binding is missing');
+    expect(res.status).toBe(503);
+    const json = await res.json() as { success: boolean; error?: string };
+    expect(json.success).toBe(false);
+    expect(json.error).toBe(SERVICE_UNAVAILABLE_MESSAGE);
+    spy.mockRestore();
+  });
+
+  it('does not leak operator setup instructions to the visitor', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const res = createUnavailableResponse('run `npx wrangler d1 create grreat-waitlist`');
+    const json = await res.json() as { success: boolean; error?: string };
+    expect(json.error).not.toMatch(/wrangler|d1|database_id|migration/i);
+    spy.mockRestore();
+  });
+
+  it('logs the operator detail server-side via console.error', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    createUnavailableResponse('DB binding is missing');
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining('DB binding is missing'),
+    );
+    spy.mockRestore();
   });
 });
 

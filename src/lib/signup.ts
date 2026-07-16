@@ -35,6 +35,22 @@ export function createSignupResponse(
   });
 }
 
+export const SERVICE_UNAVAILABLE_MESSAGE =
+  'The waitlist is temporarily unavailable — please try again shortly.';
+
+/**
+ * Create the 503 response returned when the waitlist database is unavailable.
+ * The operator-facing detail is logged server-side; visitors only see a
+ * generic message.
+ */
+export function createUnavailableResponse(operatorDetail: string): Response {
+  console.error(`Waitlist signup unavailable: ${operatorDetail}`);
+  return createSignupResponse(
+    { success: false, error: SERVICE_UNAVAILABLE_MESSAGE },
+    503,
+  );
+}
+
 export interface Env {
   DB?: D1Database;
 }
