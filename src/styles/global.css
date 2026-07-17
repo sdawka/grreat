@@ -254,42 +254,6 @@
     color: var(--orange-text);
   }
 
-  /* ── Section styling ── */
-  section {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 56px 36px 0;
-    width: 100%;
-  }
-
-  .section-header {
-    display: flex;
-    gap: 12px;
-    align-items: baseline;
-    margin-bottom: 28px;
-  }
-
-  .section-number {
-    font: 10px var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    min-width: 50px;
-  }
-
-  .section-title {
-    font: clamp(28px, 4vw, 48px) / 1.02 var(--serif);
-    letter-spacing: -0.04em;
-    margin: 0;
-  }
-
-  /* Hard rule above sections */
-  .section-rule {
-    border: 0;
-    border-top: 1px solid var(--hair);
-    margin: 0 36px;
-  }
-
   /* ── Bucket grid ── */
   .bucket-grid {
     display: grid;
@@ -507,10 +471,6 @@
   }
 
   /* ── CTA section ── */
-  .cta-section {
-    padding-bottom: 56px;
-  }
-
   .privacy-note {
     font: 10px / 1.5 var(--mono);
     color: var(--muted);
@@ -575,14 +535,6 @@
       display: none;
     }
 
-    section {
-      padding: 40px 18px 0;
-    }
-
-    .section-rule {
-      margin: 0 18px;
-    }
-
     .bucket-grid {
       grid-template-columns: 1fr 1fr;
     }
@@ -632,7 +584,6 @@
     .topbar,
     .edition,
     .hero-action .kicker,
-    .section-number,
     .principle-number {
       font-size: 0.6875rem; /* 11px */
     }

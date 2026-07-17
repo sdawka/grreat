@@ -74,6 +74,21 @@
   --measure-legacy-narrow: 37.5rem;   /* 600px — SecondaryCTA paragraphs */
   --space-legacy-28: 1.75rem;         /* 28px — SecondaryCTA closing margin, between space-6/7 */
 
+  /* Legacy-parity Section values (Step 3) — the given Section spec code (§5b)
+     uses --measure/--space-6/--tracking-display/--leading-tight and --gutter's
+     continuous clamp; the pre-migration section scaffold used slightly
+     different fixed values. Pixel parity governs this migration step
+     (docs/design-system.md Task 2 controller decision), so these reproduce
+     the old numbers exactly. Candidates for removal once a future step
+     accepts the token-collapsed values. */
+  --gutter-legacy-min: 1.125rem;       /* 18px — pre-migration section/rule side padding ≤760px */
+  --gutter-legacy-max: 2.25rem;        /* 36px — pre-migration section/rule side padding >760px */
+  --tracking-legacy-title: -0.04em;    /* .section-title letter-spacing */
+  --leading-legacy-title: 1.02;        /* .section-title line-height */
+  --tracking-legacy-number: 0.1em;     /* .section-number letter-spacing */
+  --text-legacy-number-sm: 0.6875rem;  /* 11px — .section-number's ≤760px micro-type floor bump */
+  --space-legacy-number-min: 3.125rem; /* 50px — .section-number min-width */
+
   /* Legacy compat (existing names, existing values) — consumed by layer(legacy)
      and the data-bucket remap; removed when the legacy layer is deleted. */
   --bucket: #2448ff;

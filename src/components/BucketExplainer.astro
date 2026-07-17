@@ -1,15 +1,10 @@
 ---
+import Section from './layout/Section.astro';
+
 // Visual six-bucket explainer using G / R¹ / R² / E / A / T
 ---
 
-<hr class="section-rule" aria-hidden="true" />
-
-<section aria-labelledby="buckets-title">
-  <div class="section-header">
-    <span class="section-number">01 /</span>
-    <h2 id="buckets-title" class="section-title">Six persistent buckets</h2>
-  </div>
-
+<Section title="Six persistent buckets" id="buckets">
   <div class="bucket-grid">
     <div class="bucket-card" data-bucket="goals">
       <span class="bucket-letter">G</span>
@@ -42,4 +37,4 @@
       <p class="bucket-desc">Track estimates vs actuals. When estimates mismatch, execution feeds back to recalibrate.</p>
     </div>
   </div>
-</section>
+</Section>

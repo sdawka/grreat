@@ -1,18 +1,16 @@
 ---
+import Section from './layout/Section.astro';
 import Prose from './primitives/Prose.astro';
 
 // Second signup CTA and compact privacy copy
 ---
 
-<hr class="section-rule" aria-hidden="true" />
-
-<section class="cta-section" aria-labelledby="cta-title">
-  <div class="section-header">
-    <span class="section-number">05 /</span>
-    <h2 id="cta-title" class="section-title">Join the working edition</h2>
-  </div>
-
-  <Prose class="intro" measure={false}>
+<Section
+  title="Join the working edition"
+  id="cta"
+  style="--section-pad-bottom: var(--space-10); --section-intro-measure: var(--measure-legacy-narrow); --section-intro-margin: var(--space-3)"
+>
+  <Prose slot="intro" measure={false}>
     Get public-edition launch notes, early product access, and system updates as GRREAT moves from a working method into a tool you can run with your AI agent.
   </Prose>
 
@@ -21,14 +19,9 @@ import Prose from './primitives/Prose.astro';
   </Prose>
 
   <slot name="form" />
-</section>
+</Section>
 
 <style>
-  .intro {
-    max-inline-size: var(--measure-legacy-narrow);
-    margin-block-end: var(--space-3);
-  }
-
   .closing {
     max-inline-size: var(--measure-legacy-narrow);
     margin-block-end: var(--space-legacy-28);

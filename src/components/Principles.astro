@@ -1,19 +1,13 @@
 ---
+import Section from './layout/Section.astro';
 import Prose from './primitives/Prose.astro';
 
 // Principles: exactly one next action, explicit owner, WIP max 5, queue max 3,
 // no orphaned projects, proposal-only structural changes
 ---
 
-<hr class="section-rule" aria-hidden="true" />
-
-<section aria-labelledby="principles-title">
-  <div class="section-header">
-    <span class="section-number">04 /</span>
-    <h2 id="principles-title" class="section-title">Principles</h2>
-  </div>
-
-  <Prose class="intro" measure={false}>
+<Section title="Principles">
+  <Prose slot="intro" measure={false}>
     The system enforces a small set of hard constraints. These are not suggestions — they are
     invariants that keep the operating system from degrading.
   </Prose>
@@ -44,11 +38,4 @@ import Prose from './primitives/Prose.astro';
       <span><strong>Proposal-only changes.</strong> Structural changes (adding a bucket, changing a constraint, altering a feedback rule) require a written proposal and review. No ad-lib changes to the system.</span>
     </li>
   </ol>
-</section>
-
-<style>
-  .intro {
-    max-inline-size: var(--measure-legacy-wide);
-    margin-block-end: var(--space-6);
-  }
-</style>
+</Section>
