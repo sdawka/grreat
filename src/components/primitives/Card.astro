@@ -1,0 +1,40 @@
+---
+// Component-token API: `highlight` reassigns --card-bg/--card-shadow/--card-margin-end
+// together in exactly one place. `pad` injects --card-pad the way Stack injects --stack-gap.
+export interface Props {
+  variant?: 'default' | 'highlight';
+  pad?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  as?: string;
+  class?: string;
+}
+
+const { variant = 'default', pad = 6, as: Tag = 'div', class: className, ...rest } = Astro.props;
+---
+
+<Tag
+  class:list={['card', className]}
+  data-variant={variant}
+  style={`--card-pad: var(--space-${pad})`}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    --card-bg: var(--surface-raised);
+    --card-shadow: none;
+    --card-margin-end: 0;
+    border: var(--border-1) solid var(--border-strong);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    margin-inline-end: var(--card-margin-end);
+    padding: var(--card-pad);
+  }
+
+  .card[data-variant='highlight'] {
+    --card-bg: var(--surface-accent);
+    --card-shadow: var(--shadow-hard);
+    --card-margin-end: var(--shadow-offset);
+  }
+</style>

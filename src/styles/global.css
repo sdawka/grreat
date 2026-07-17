@@ -254,113 +254,6 @@
     color: var(--orange-text);
   }
 
-  /* ── Bucket grid ── */
-  .bucket-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    background: var(--hair);
-    border: 1px solid var(--ink);
-  }
-
-  .bucket-card {
-    background: var(--paper-light);
-    padding: 20px 18px;
-    transition: background 0.15s;
-  }
-
-  .bucket-card:active {
-    background: var(--paper);
-  }
-
-  .bucket-card[data-bucket='goals'] { --bucket: var(--red); }
-  .bucket-card[data-bucket='research'] { --bucket: var(--blue); }
-  .bucket-card[data-bucket='roadmap'] { --bucket: var(--purple); }
-  .bucket-card[data-bucket='execution'] { --bucket: var(--orange); }
-  .bucket-card[data-bucket='analysis'] { --bucket: var(--green); }
-  .bucket-card[data-bucket='time'] { --bucket: var(--ink); }
-
-  .bucket-letter {
-    display: block;
-    font: 40px / 0.85 var(--serif);
-    color: var(--bucket);
-    letter-spacing: -2px;
-    margin-bottom: 6px;
-  }
-
-  .bucket-name {
-    display: block;
-    font: 600 12px / 1.2 var(--sans);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
-  }
-
-  .bucket-desc {
-    font: 12px / 1.55 var(--sans);
-    color: var(--muted);
-    margin: 0;
-  }
-
-  /* ── Feedback loop diagram ── */
-  .feedback-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    padding-top: 8px;
-  }
-
-  @media (max-width: 760px) {
-    .feedback-grid {
-      grid-template-columns: 1fr;
-      gap: 28px;
-    }
-  }
-
-  .feedback-side {
-    border: 1px solid var(--ink);
-    padding: 24px;
-    background: var(--paper-light);
-  }
-
-  .feedback-side h3 {
-    font: 18px var(--serif);
-    margin: 0 0 16px;
-    letter-spacing: -0.5px;
-  }
-
-  .feedback-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .feedback-list li {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--hair);
-    font: 13px / 1.5 var(--sans);
-  }
-
-  .feedback-list li:last-child {
-    border-bottom: 0;
-  }
-
-  .feedback-list li .arrow {
-    color: var(--bucket);
-    font-family: var(--mono);
-    font-size: 13px;
-  }
-
-  .feedback-list li strong {
-    font-weight: 600;
-  }
-
-  .feedback-list li em {
-    font-style: normal;
-    color: var(--muted);
-    font-size: 11px;
-  }
-
   /* ── Now Card ── */
   .now-card {
     background: var(--yellow);
@@ -417,59 +310,6 @@
     text-transform: uppercase;
   }
 
-  /* ── Principles list ── */
-  .principles-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 1px solid var(--ink);
-  }
-
-  @media (max-width: 760px) {
-    .principles-list {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .principles-list li {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--hair);
-    border-right: 1px solid var(--hair);
-    font: 13px / 1.5 var(--sans);
-    display: flex;
-    gap: 10px;
-    align-items: baseline;
-  }
-
-  .principles-list li:nth-child(even) {
-    border-right: 0;
-  }
-
-  @media (max-width: 760px) {
-    .principles-list li {
-      border-right: 0;
-    }
-  }
-
-  .principles-list li:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-
-  @media (max-width: 760px) {
-    .principles-list li:last-child {
-      border-bottom: 0;
-    }
-  }
-
-  .principle-number {
-    font: 9px var(--mono);
-    color: var(--muted);
-    min-width: 20px;
-  }
-
   /* ── CTA section ── */
   .privacy-note {
     font: 10px / 1.5 var(--mono);
@@ -516,12 +356,6 @@
   }
 
   /* ── Responsive ── */
-  @media (max-width: 900px) {
-    .bucket-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
   @media (max-width: 760px) {
     .hero {
       padding: 40px 18px 0;
@@ -533,10 +367,6 @@
 
     .topbar .folio {
       display: none;
-    }
-
-    .bucket-grid {
-      grid-template-columns: 1fr 1fr;
     }
 
     .signup-form {
@@ -583,17 +413,12 @@
 
     .topbar,
     .edition,
-    .hero-action .kicker,
-    .principle-number {
+    .hero-action .kicker {
       font-size: 0.6875rem; /* 11px */
     }
   }
 
   @media (max-width: 500px) {
-    .bucket-grid {
-      grid-template-columns: 1fr;
-    }
-
     .hero .wordmark {
       font-size: clamp(42px, 15vw, 56px);
     }

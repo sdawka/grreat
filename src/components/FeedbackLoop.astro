@@ -1,8 +1,21 @@
 ---
 import Section from './layout/Section.astro';
 import Prose from './primitives/Prose.astro';
+import Card from './primitives/Card.astro';
+import AnnotatedList from './patterns/AnnotatedList.astro';
 
 // Feedback-loop explanation that makes "cyclical, not linear" obvious
+const analysisItems = [
+  { marker: '←', lead: 'Analysis → Goals', note: '— Did we achieve what we set out to? Revise objectives.' },
+  { marker: '←', lead: 'Analysis → Research', note: '— What did we learn that changes what we need to know?' },
+  { marker: '←', lead: 'Analysis → Roadmap', note: '— Does the evidence change the sequence of work?' },
+];
+
+const executionItems = [
+  { marker: '←', lead: 'Execution → Research', note: '— Blocked? Surface what you need to learn next.' },
+  { marker: '←', lead: 'Execution → Roadmap', note: "— Scope wrong? Propose a structural change, don't ad-lib." },
+  { marker: '←', lead: 'Execution → Time', note: '— Estimate mismatch? Feed back actuals to recalibrate.' },
+];
 ---
 
 <Section title="Cyclical, not linear" id="feedback">
@@ -12,46 +25,36 @@ import Prose from './primitives/Prose.astro';
   </Prose>
 
   <div class="feedback-grid">
-    <div class="feedback-side">
+    <Card>
       <h3>Analysis-driven updates</h3>
-      <ul class="feedback-list">
-        <li>
-          <span class="arrow">←</span>
-          <strong>Analysis → Goals</strong>
-          <em> — Did we achieve what we set out to? Revise objectives.</em>
-        </li>
-        <li>
-          <span class="arrow">←</span>
-          <strong>Analysis → Research</strong>
-          <em> — What did we learn that changes what we need to know?</em>
-        </li>
-        <li>
-          <span class="arrow">←</span>
-          <strong>Analysis → Roadmap</strong>
-          <em> — Does the evidence change the sequence of work?</em>
-        </li>
-      </ul>
-    </div>
+      <AnnotatedList items={analysisItems} />
+    </Card>
 
-    <div class="feedback-side">
+    <Card>
       <h3>Execution-driven corrections</h3>
-      <ul class="feedback-list">
-        <li>
-          <span class="arrow">←</span>
-          <strong>Execution → Research</strong>
-          <em> — Blocked? Surface what you need to learn next.</em>
-        </li>
-        <li>
-          <span class="arrow">←</span>
-          <strong>Execution → Roadmap</strong>
-          <em> — Scope wrong? Propose a structural change, don't ad-lib.</em>
-        </li>
-        <li>
-          <span class="arrow">←</span>
-          <strong>Execution → Time</strong>
-          <em> — Estimate mismatch? Feed back actuals to recalibrate.</em>
-        </li>
-      </ul>
-    </div>
+      <AnnotatedList items={executionItems} />
+    </Card>
   </div>
 </Section>
+
+<style>
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-legacy-28);
+    padding-block-start: var(--space-2);
+  }
+  .feedback-grid h3 {
+    margin-block: 0 var(--space-4);
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: var(--text-5);
+    letter-spacing: var(--tracking-legacy-feedback-h3);
+  }
+  @media (min-width: 48rem) {
+    .feedback-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

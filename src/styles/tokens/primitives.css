@@ -93,6 +93,21 @@
      and the data-bucket remap; removed when the legacy layer is deleted. */
   --bucket: #2448ff;
   --max-width: 1120px;
+
+  /* Legacy-parity values (Step 4a: BucketCard, RuledGrid, AnnotatedList) — exact
+     old numbers where the 5-step type scale / 4px space scale don't land on them.
+     Candidates for removal once a future pass accepts the collapsed values. */
+  --grid-min-legacy-bucket: 18rem;          /* RuledGrid min: reproduces bucket-grid's 3/2/1-col at 1280/768/375 */
+  --leading-legacy-bucket-letter: 0.85;     /* .bucket-letter line-height */
+  --tracking-legacy-bucket-letter: -0.05em; /* .bucket-letter letter-spacing (-2px @ --text-numeral) */
+  --space-legacy-6: 0.375rem;               /* 6px — .bucket-letter margin-bottom */
+  --leading-legacy-bucket-name: 1.2;        /* .bucket-name line-height */
+  --tracking-legacy-bucket-name: 0.05em;    /* .bucket-name letter-spacing */
+  --leading-legacy-bucket-desc: 1.55;       /* .bucket-desc line-height */
+  --text-legacy-note-sm: 0.6875rem;         /* 11px — AnnotatedList feedback-row note */
+  --space-legacy-10: 0.625rem;              /* 10px — AnnotatedList principles-row gap */
+  --space-legacy-marker-min: 1.25rem;       /* 20px — AnnotatedList principles-row marker min-width */
+  --tracking-legacy-feedback-h3: -0.5px;    /* .feedback-side h3 letter-spacing */
 }
 
 /* Breakpoint convention (vars can't feed media queries — this comment IS the token):

@@ -1,0 +1,28 @@
+---
+// ONE grid mechanism for ruled card/tile layouts: the gap-trick (hairline background
+// showing through a 1px gap) + auto-fit so no viewport query is needed to reflow.
+export interface Props {
+  min?: string;
+  as?: string;
+  class?: string;
+}
+
+const { min = '13rem', as: Tag = 'ul', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['ruled-grid', className]} style={`--grid-min: ${min}`} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .ruled-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min), 100%), 1fr));
+    gap: var(--border-1);
+    background: var(--border-hair);
+    border: var(--border-1) solid var(--border-strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>
