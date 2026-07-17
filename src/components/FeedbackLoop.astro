@@ -1,4 +1,6 @@
 ---
+import Prose from './primitives/Prose.astro';
+
 // Feedback-loop explanation that makes "cyclical, not linear" obvious
 ---
 
@@ -10,10 +12,10 @@
     <h2 id="feedback-title" class="section-title">Cyclical, not linear</h2>
   </div>
 
-  <p style="font: 14px / 1.6 var(--sans); color: var(--muted); max-width: 700px; margin: 0 0 24px;">
+  <Prose class="intro" measure={false}>
     GRREAT is not a funnel. Each bucket feeds back into others, creating a closed-loop operating system that
     learns and adapts with every cycle.
-  </p>
+  </Prose>
 
   <div class="feedback-grid">
     <div class="feedback-side">
@@ -59,3 +61,11 @@
     </div>
   </div>
 </section>
+
+<style>
+  /* Legacy exact width/spacing, pending Step 3's Section `intro` slot. */
+  .intro {
+    max-inline-size: 43.75rem; /* 700px */
+    margin-block-end: var(--space-6);
+  }
+</style>

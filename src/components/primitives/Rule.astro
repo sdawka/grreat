@@ -1,0 +1,22 @@
+---
+// Structural hairline — `aria-hidden` is built in since a rule never carries content.
+export interface Props {
+  weight?: 'strong' | 'hair';
+  class?: string;
+}
+
+const { weight = 'strong', class: className, ...rest } = Astro.props;
+---
+
+<hr class:list={['rule', className]} data-weight={weight} aria-hidden="true" {...rest} />
+
+<style>
+  .rule {
+    border: 0;
+    border-top: var(--border-1) solid var(--border-strong);
+  }
+
+  .rule[data-weight='hair'] {
+    border-top-color: var(--border-hair);
+  }
+</style>

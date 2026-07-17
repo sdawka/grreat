@@ -1,0 +1,56 @@
+---
+// Body copy — replaces the inline-styled intro paragraphs. `measure` applies
+// the shared prose-width token; callers that still need a legacy exact width
+// (pending Step 3's Section `intro` slot) pass `measure={false}` and size
+// themselves via `class`.
+export interface Props {
+  size?: 'body' | 'body-s';
+  muted?: boolean;
+  measure?: boolean;
+  as?: string;
+  class?: string;
+}
+
+const {
+  size = 'body',
+  muted = true,
+  measure = true,
+  as: Tag = 'p',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  class:list={['prose', className]}
+  data-size={size}
+  data-muted={muted || undefined}
+  data-measure={measure || undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .prose {
+    margin: 0;
+    font-family: var(--sans);
+    line-height: var(--leading-relaxed);
+  }
+
+  .prose[data-size='body'] {
+    font-size: var(--text-4);
+  }
+
+  .prose[data-size='body-s'] {
+    font-size: var(--text-3);
+  }
+
+  .prose[data-muted] {
+    color: var(--text-muted);
+  }
+
+  .prose[data-measure] {
+    max-inline-size: var(--measure);
+  }
+</style>

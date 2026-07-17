@@ -1,13 +1,15 @@
 ---
+import VisuallyHidden from './primitives/VisuallyHidden.astro';
+
 // Reusable signup form. Each rendered instance initializes independently.
 ---
 
 <form class="signup-form" data-signup-form novalidate aria-label="Waitlist signup">
-  <div class="honeypot" aria-hidden="true">
+  <VisuallyHidden as="div" aria-hidden="true">
     <label>Leave this empty
       <input type="text" name="website" tabindex="-1" autocomplete="off" />
     </label>
-  </div>
+  </VisuallyHidden>
 
   <div class="field">
     <label>
@@ -94,17 +96,3 @@
     });
   });
 </script>
-
-<style is:global>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-</style>

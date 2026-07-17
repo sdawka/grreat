@@ -254,16 +254,6 @@
     color: var(--orange-text);
   }
 
-  /* Honeypot — visually hidden but accessible to bots */
-  .honeypot {
-    position: absolute;
-    left: -9999px;
-    opacity: 0;
-    height: 0;
-    width: 0;
-    overflow: hidden;
-  }
-
   /* ── Section styling ── */
   section {
     max-width: var(--max-width);

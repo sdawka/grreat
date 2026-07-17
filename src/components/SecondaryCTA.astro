@@ -1,4 +1,6 @@
 ---
+import Prose from './primitives/Prose.astro';
+
 // Second signup CTA and compact privacy copy
 ---
 
@@ -10,13 +12,27 @@
     <h2 id="cta-title" class="section-title">Join the working edition</h2>
   </div>
 
-  <p style="font: 14px / 1.6 var(--sans); color: var(--muted); max-width: 600px; margin: 0 0 12px;">
+  <Prose class="intro" measure={false}>
     Get public-edition launch notes, early product access, and system updates as GRREAT moves from a working method into a tool you can run with your AI agent.
-  </p>
+  </Prose>
 
-  <p style="font: 14px / 1.6 var(--sans); color: var(--muted); max-width: 600px; margin: 0 0 28px;">
+  <Prose class="closing" measure={false}>
     You're reading the working edition — join to get the public edition when it ships.
-  </p>
+  </Prose>
 
   <slot name="form" />
 </section>
+
+<style>
+  /* Legacy exact width/spacing, pending Step 3's Section `intro` slot. */
+  .intro {
+    max-inline-size: 37.5rem; /* 600px */
+    margin-block-end: var(--space-3);
+  }
+
+  .closing {
+    max-inline-size: 37.5rem; /* 600px */
+    margin-block-end: 1.75rem; /* 28px — no exact space-token match */
+  }
+</style>
+

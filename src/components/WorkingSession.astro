@@ -1,4 +1,7 @@
 ---
+import Prose from './primitives/Prose.astro';
+import Stack from './layout/Stack.astro';
+
 // "How a working session feels" — NOW card, owner split (you vs Hermes), and feedback update
 ---
 
@@ -10,47 +13,58 @@
     <h2 id="session-title" class="section-title">How a working session feels</h2>
   </div>
 
-  <p style="font: 14px / 1.6 var(--sans); color: var(--muted); max-width: 700px; margin: 0 0 24px;">
+  <Prose class="intro" measure={false}>
     Every session starts with one card: the current primary next action. No open loops, no context switching.
     Every item has an owner — either you or your AI agent — and ownership is explicit.
-  </p>
+  </Prose>
 
-  <div class="now-card" role="figure" aria-label="Session view example">
-    <div class="now-index">
-      NOW<br />
-      <span>01</span>
-    </div>
-    <div class="now-copy">
-      <div class="label">Primary next action</div>
-      <div class="now-action-text">
-        Draft Q3 OKRs for the product team
+  <Stack gap={5}>
+    <div class="now-card" role="figure" aria-label="Session view example">
+      <div class="now-index">
+        NOW<br />
+        <span>01</span>
+      </div>
+      <div class="now-copy">
+        <div class="label">Primary next action</div>
+        <div class="now-action-text">
+          Draft Q3 OKRs for the product team
+        </div>
+      </div>
+      <div class="ownership">
+        <span class="label">Owned by</span>
+        <strong>You</strong>
       </div>
     </div>
-    <div class="ownership">
-      <span class="label">Owned by</span>
-      <strong>You</strong>
-    </div>
-  </div>
 
-  <div class="now-card" style="margin-top: 20px" role="figure" aria-label="AI agent session view">
-    <div class="now-index">
-      NOW<br />
-      <span>02</span>
-    </div>
-    <div class="now-copy">
-      <div class="label">Primary next action</div>
-      <div class="now-action-text">
-        Run test suite &amp; report failures
+    <div class="now-card" role="figure" aria-label="AI agent session view">
+      <div class="now-index">
+        NOW<br />
+        <span>02</span>
+      </div>
+      <div class="now-copy">
+        <div class="label">Primary next action</div>
+        <div class="now-action-text">
+          Run test suite &amp; report failures
+        </div>
+      </div>
+      <div class="ownership">
+        <span class="label">Owned by</span>
+        <strong>Hermes (AI agent)</strong>
       </div>
     </div>
-    <div class="ownership">
-      <span class="label">Owned by</span>
-      <strong>Hermes (AI agent)</strong>
-    </div>
-  </div>
+  </Stack>
 
   <p style="font: 12px / 1.5 var(--mono); color: var(--muted); margin-top: 20px;">
     ↔ When a card is done, the owner signals completion. Analysis runs, feedback loops fire,
     and the next primary action surfaces. No orphaned projects.
   </p>
 </section>
+
+<style>
+  /* Legacy exact width/spacing, pending Step 3's Section `intro` slot. */
+  .intro {
+    max-inline-size: 43.75rem; /* 700px */
+    margin-block-end: var(--space-6);
+  }
+</style>
+

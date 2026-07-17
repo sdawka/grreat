@@ -1,0 +1,29 @@
+---
+// Unifies the old `.honeypot` and `.sr-only` techniques: content is removed
+// from the visual flow but stays in the accessibility tree and DOM (so bots
+// still see honeypot fields, and screen readers still see sr-only text).
+export interface Props {
+  as?: string;
+  class?: string;
+}
+
+const { as: Tag = 'span', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['visually-hidden', className]} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
