@@ -73,23 +73,20 @@ const ogImageURL = new URL(ogImage, Astro.site);
   .skip-link {
     position: absolute;
     top: -100%;
-    left: 24px;
+    left: var(--space-6);
     z-index: 100;
-    padding: 10px 16px;
+    padding: var(--space-legacy-10) var(--space-4);
     background: var(--surface-inverse);
-    /* Legacy text is literally `--paper`, not the paper-light `--text-inverse`
-       Button uses — --surface-page points at the same primitive, keeping this
-       off the raw color while matching the exact legacy pixel (see Masthead
-       .kicker-chip for the same substitution). */
-    color: var(--surface-page);
-    font: 0.8125rem var(--mono);
+    color: var(--text-on-inverse);
+    font-family: var(--mono);
+    font-size: var(--text-3);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-caps-1);
     text-decoration: none;
   }
 
   .skip-link:focus {
-    top: 8px;
+    top: var(--space-2);
   }
 
   /* Layout shell — single-column for signup, no sidebar */

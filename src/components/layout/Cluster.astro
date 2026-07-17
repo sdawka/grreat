@@ -6,7 +6,7 @@
 // 6px) — fed into the same inline custom-property mechanism Switcher/Card
 // use, so it always wins regardless of cross-component cascade order.
 export interface Props {
-  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | string;
+  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | `var(--${string})`;
   align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';
   justify?: 'start' | 'center' | 'end' | 'between' | 'around';
   as?: string;

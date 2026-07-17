@@ -142,10 +142,7 @@ const { class: className, ...rest } = Astro.props;
 
   .kicker-chip {
     background: var(--surface-inverse);
-    /* Legacy chip text is literally `--paper`, not the paper-light `--text-inverse`
-       Button uses — reusing --surface-page (same token→value pointer) keeps this
-       off the raw primitive while still matching the exact legacy pixel. */
-    color: var(--surface-page);
+    color: var(--text-on-inverse);
     padding: var(--space-legacy-5) var(--space-legacy-7);
   }
 

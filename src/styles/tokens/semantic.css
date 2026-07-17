@@ -10,7 +10,10 @@
 
   --text-strong:  var(--ink);
   --text-muted:   var(--muted);
-  --text-inverse: var(--paper-light);
+  --text-inverse: var(--paper-light);   /* text on paper-light fills (filled Button) */
+  --text-on-inverse: var(--paper);       /* text on --surface-inverse fills (kicker chip, skip-link);
+                                            legacy used --paper, NOT paper-light — kept distinct so it
+                                            can diverge from --text-inverse without touching call sites */
   --text-link-hover: var(--blue);
 
   --border-strong: var(--ink);             /* structural rules, card edges */
