@@ -124,7 +124,34 @@
   --text-legacy-input: 1rem;         /* 16px — Input font-size (≥16px prevents iOS focus zoom) */
   --leading-legacy-status: 1.4;      /* .form-message line-height */
   --space-legacy-btn-x: 1.375rem;    /* 22px — Button --btn-pad-x retune at the SignupForm call site */
-  --size-legacy-signup-max: 32.5rem; /* 520px — .signup-form max-width, shared by .signup-fields + .privacy-note */
+  --size-legacy-signup-max: 32.5rem; /* 520px — .signup-form max-width, shared by .signup-fields + .privacy-note;
+                                         reused as-is by Masthead's hero-action lede (Step 4d — same 520px) */
+
+  /* Legacy-parity values (Step 4d: Masthead, Topbar, Footer) — wordmark/edition/
+     kicker/colophon type, and the hero/topbar/colophon box model, none of which
+     land on the collapsed scales. --text-legacy-wordmark corrects a latent bug
+     in Step 1's --text-d3 (42→78px): that token assumed the wordmark's mobile
+     floor came from the same clamp as its fluid range, but legacy actually runs
+     TWO separate clamps (a base one and a ≤500px override) — text-d3 never had
+     a real consumer to catch the mismatch until this step. This token is a
+     single clamp tuned to reproduce both legacy clamps' rendered values at the
+     3 harness checkpoints (w375/768/1280) exactly. */
+  --text-legacy-wordmark: clamp(3.5rem, 8vw, 4.875rem); /* 56→78px */
+  --leading-legacy-wordmark: 0.83;
+  --tracking-legacy-wordmark: -0.045em;
+  --measure-legacy-tagline: 42.5rem;   /* 680px — tagline max-width */
+  --text-legacy-hero-lede: 0.9375rem;  /* 15px — hero's first lede paragraph */
+  --measure-legacy-hero-lede: 40rem;   /* 640px — hero's first lede paragraph max-width */
+  --tracking-legacy-edition: 0.14em;
+  --tracking-legacy-caps-3: 0.1em;     /* kicker + colophon tracked-mono caps — legacy's third,
+                                           never-canonicalized caps-tracking value (--tracking-caps-1/-2
+                                           cover 0.08em/0.12em; this is the remaining 0.1em) */
+  --space-legacy-42: 2.625rem;  /* 42px — topbar page-no width; hero-action margin-top */
+  --space-legacy-46: 2.875rem;  /* 46px — topbar height */
+  --space-legacy-60: 3.75rem;   /* 60px — hero padding-block-start ≥48rem */
+  --space-legacy-11: 0.6875rem; /* 11px — colophon padding-block ≥48rem */
+  --space-legacy-5: 0.3125rem;  /* 5px — kicker chip padding-block; .reg margin-inline-start */
+  --space-legacy-7: 0.4375rem;  /* 7px — kicker chip padding-inline */
 }
 
 /* Breakpoint convention (vars can't feed media queries — this comment IS the token):

@@ -1,14 +1,101 @@
 ---
-// Footer/colophon with Git/Markdown/open-system language
+import Container from './layout/Container.astro';
+import Cluster from './layout/Cluster.astro';
+import VisuallyHidden from './primitives/VisuallyHidden.astro';
+
+// Footer/colophon with Git/Markdown/open-system language.
+export interface Props {
+  links?: { label: string; href: string }[];
+  class?: string;
+}
+
+const {
+  links = [{ label: 'HERMES AGENT', href: 'https://github.com/nousresearch/hermes' }],
+  class: className,
+  ...rest
+} = Astro.props;
 ---
 
-<footer class="colophon" role="contentinfo">
-  <span>GRREAT / THE WORKING EDITION</span>
-  <span>OPEN SYSTEM — MARKDOWN IS THE SOURCE OF TRUTH</span>
-  <span>GIT VERSIONED · NO PROPRIETARY FORMATS</span>
-  <span>
-    <a href="https://github.com/nousresearch/hermes" target="_blank" rel="noopener noreferrer">
-      HERMES AGENT<span class="sr-only"> (opens in new tab)</span>
-    </a>
-  </span>
-</footer>
+<Container as="footer" size="full" role="contentinfo" class:list={['colophon', className]} {...rest}>
+  <Cluster justify="between" align="start" gap="var(--space-legacy-6)" class="colophon-flex">
+    <span>GRREAT / THE WORKING EDITION</span>
+    <span>OPEN SYSTEM — MARKDOWN IS THE SOURCE OF TRUTH</span>
+    <span>GIT VERSIONED · NO PROPRIETARY FORMATS</span>
+    <span>
+      {links.map(({ label, href }) => (
+        <a href={href} target="_blank" rel="noopener noreferrer">
+          {label}<VisuallyHidden as="span"> (opens in new tab)</VisuallyHidden>
+        </a>
+      ))}
+    </span>
+  </Cluster>
+</Container>
+
+<style>
+  /* Container's own scoped base rule compiles to `.container[data-astro-cid-*]`
+     (specificity 0,2,0) — a bare `:global(.colophon)` (0,1,0) loses to it
+     outright. Pairing both classes present on the rendered element ties
+     specificity; source order (this file compiles after its Container
+     import) decides. Same reasoning applies to Cluster/.colophon-flex below. */
+  :global(.container.colophon) {
+    inline-size: 100%;
+    padding-inline: var(--gutter-legacy-min);
+    padding-block: var(--space-legacy-10);
+    border-block-start: var(--border-1) solid var(--border-strong);
+    font-family: var(--mono);
+    font-size: var(--text-2); /* 12px — legacy mobile micro-type floor */
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-legacy-caps-3);
+    color: var(--text-muted);
+  }
+  @media (min-width: 48rem) {
+    :global(.container.colophon) {
+      padding-inline: var(--gutter-legacy-max);
+      padding-block: var(--space-legacy-11);
+      font-size: var(--text-1); /* legacy desktop value is 8px; floored, accepted deviation */
+    }
+  }
+
+  /* Legacy stacks the colophon into a single column below 48rem before
+     joining into the row layout Cluster's own props already express — the
+     mobile `align-items:flex-start` comes for free from the `align="start"`
+     prop above (no cross-component override needed there); only the ≥48rem
+     flip to `stretch` needs one, and Cluster's own per-value modifier rule
+     (`.cluster[data-astro-cid-*][data-align='start']`, specificity 0,3,0) is
+     more specific than a plain two-class pairing — `[data-align]` (attribute
+     presence, not value) brings this rule back up to 0,3,0 to tie it. */
+  :global(.cluster.colophon-flex) {
+    flex-direction: column;
+  }
+  @media (min-width: 48rem) {
+    :global(.cluster.colophon-flex) {
+      flex-direction: row;
+    }
+    :global(.cluster.colophon-flex[data-align]) {
+      align-items: stretch;
+    }
+  }
+
+  /* span/a below are literal elements of this template (nested inside Cluster's
+     slot, not part of Cluster's own render), so they stay locally scoped. */
+  :global(.colophon) span {
+    white-space: nowrap;
+  }
+
+  :global(.colophon) a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    display: inline-block;
+    padding: var(--space-2) var(--space-1);
+    margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-1));
+  }
+  @media (hover: hover) {
+    :global(.colophon) a:hover {
+      color: var(--text-strong);
+    }
+  }
+  :global(.colophon) a:active {
+    color: var(--text-strong);
+  }
+</style>
