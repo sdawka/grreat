@@ -67,6 +67,12 @@ const { class: className, ...rest } = Astro.props;
   }
 
   .wordmark {
+    /* Legacy used the `font:` shorthand, which implicitly resets font-weight
+       to normal — the actual bug behind the unresolved "glyph outline" diff
+       reported earlier. Longhand properties don't reset it, so the <h1>'s
+       UA-default bold survives unless stated explicitly (same footgun
+       Section's `.number`/`.title` already guard against). */
+    font-weight: 400;
     font-family: var(--serif);
     font-size: var(--text-legacy-wordmark);
     line-height: var(--leading-legacy-wordmark);
@@ -74,6 +80,9 @@ const { class: className, ...rest } = Astro.props;
   }
 
   .wordmark .reg {
+    /* Inherits 400 from .wordmark above now, but legacy's own `font:`
+       shorthand reset this independently too — stated explicitly to match. */
+    font-weight: 400;
     font-family: var(--mono);
     font-size: var(--text-1); /* legacy 8px at every width; floored, accepted deviation */
     vertical-align: top;
