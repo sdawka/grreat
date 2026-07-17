@@ -66,12 +66,10 @@
   --measure: 65ch;                          /* ⊕ ch-based prose measure (was ad-hoc 520/600/680px) */
   --content-max: 70rem;                     /* 1120px, keeps current --max-width value */
 
-  /* Legacy-parity prose values (Step 2 hygiene pass) — exact widths/spacing from
-     the pre-migration inline styles. --measure (65ch) doesn't reproduce them at
-     the tested viewport checkpoints, so Prose call sites pin to these instead.
-     Removed once Step 3's Section `intro` slot normalizes onto var(--measure). */
-  --measure-legacy-wide: 43.75rem;    /* 700px — FeedbackLoop/Principles/WorkingSession intro */
-  --measure-legacy-narrow: 37.5rem;   /* 600px — SecondaryCTA paragraphs */
+  /* Legacy-parity spacing (Step 2 hygiene pass) — exact value from the
+     pre-migration inline styles; doesn't land on the 4px scale. The section
+     intros' legacy 700/600px widths (--measure-legacy-wide/-narrow) were
+     removed in the Tier 4 pass — they now normalize onto var(--measure). */
   --space-legacy-28: 1.75rem;         /* 28px — SecondaryCTA closing margin, between space-6/7 */
 
   /* Legacy-parity Section values (Step 3) — the given Section spec code (§5b)
@@ -136,9 +134,12 @@
      a real consumer to catch the mismatch until this step. This token is a
      single clamp tuned to reproduce both legacy clamps' rendered values at the
      3 harness checkpoints (w375/768/1280) exactly. Between those checkpoints
-     (~501-700px viewports), this single clamp interpolates differently from
-     legacy's two-clamp behavior — a known, accepted gap; do not "fix" without
-     a design decision. */
+     (~501-700px viewports) it interpolates differently from legacy — and that
+     is deliberate: legacy's two-clamp setup was DISCONTINUOUS (a 56→48px size
+     *drop* at the 500→501px boundary, where the base clamp's floor took over
+     from the ≤500px override). This single clamp is smooth and monotonic, so
+     it is kept as the intended behavior rather than reproducing legacy's jump.
+     (Resolved in the Tier 4 pass, 2026-07-17.) */
   --text-legacy-wordmark: clamp(3.5rem, 8vw, 4.875rem); /* 56→78px */
   --leading-legacy-wordmark: 0.83;
   --tracking-legacy-wordmark: -0.045em;
