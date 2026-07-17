@@ -24,15 +24,14 @@ import Prose from './primitives/Prose.astro';
 </section>
 
 <style>
-  /* Legacy exact width/spacing, pending Step 3's Section `intro` slot. */
   .intro {
-    max-inline-size: 37.5rem; /* 600px */
+    max-inline-size: var(--measure-legacy-narrow);
     margin-block-end: var(--space-3);
   }
 
   .closing {
-    max-inline-size: 37.5rem; /* 600px */
-    margin-block-end: 1.75rem; /* 28px — no exact space-token match */
+    max-inline-size: var(--measure-legacy-narrow);
+    margin-block-end: var(--space-legacy-28);
   }
 </style>
 

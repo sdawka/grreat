@@ -66,6 +66,14 @@
   --measure: 65ch;                          /* ⊕ ch-based prose measure (was ad-hoc 520/600/680px) */
   --content-max: 70rem;                     /* 1120px, keeps current --max-width value */
 
+  /* Legacy-parity prose values (Step 2 hygiene pass) — exact widths/spacing from
+     the pre-migration inline styles. --measure (65ch) doesn't reproduce them at
+     the tested viewport checkpoints, so Prose call sites pin to these instead.
+     Removed once Step 3's Section `intro` slot normalizes onto var(--measure). */
+  --measure-legacy-wide: 43.75rem;    /* 700px — FeedbackLoop/Principles/WorkingSession intro */
+  --measure-legacy-narrow: 37.5rem;   /* 600px — SecondaryCTA paragraphs */
+  --space-legacy-28: 1.75rem;         /* 28px — SecondaryCTA closing margin, between space-6/7 */
+
   /* Legacy compat (existing names, existing values) — consumed by layer(legacy)
      and the data-bucket remap; removed when the legacy layer is deleted. */
   --bucket: #2448ff;
