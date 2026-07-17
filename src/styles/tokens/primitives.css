@@ -135,7 +135,10 @@
      TWO separate clamps (a base one and a ≤500px override) — text-d3 never had
      a real consumer to catch the mismatch until this step. This token is a
      single clamp tuned to reproduce both legacy clamps' rendered values at the
-     3 harness checkpoints (w375/768/1280) exactly. */
+     3 harness checkpoints (w375/768/1280) exactly. Between those checkpoints
+     (~501-700px viewports), this single clamp interpolates differently from
+     legacy's two-clamp behavior — a known, accepted gap; do not "fix" without
+     a design decision. */
   --text-legacy-wordmark: clamp(3.5rem, 8vw, 4.875rem); /* 56→78px */
   --leading-legacy-wordmark: 0.83;
   --tracking-legacy-wordmark: -0.045em;

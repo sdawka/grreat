@@ -1,5 +1,9 @@
 ---
 // Structural hairline — `aria-hidden` is built in since a rule never carries content.
+// No current consumers: layout/Section renders its own inline rule, since it needs
+// legacy-parity width (calc(100% - 2 * gutter)) that this primitive doesn't expose.
+// Rule remains the standalone-rule primitive for future pages that don't need
+// that width override.
 export interface Props {
   weight?: 'strong' | 'hair';
   class?: string;
