@@ -1,6 +1,9 @@
 ---
 // THE mono-caps microlabel — the single source for the small uppercase
-// tracked-mono treatment used across folios, kickers, and index numbers.
+// tracked-mono treatment used across folios and kickers. Not for list-index
+// numerals (AnnotatedList's `.marker`): those need their own tracking/weight
+// per row-anatomy variant, which would mean overriding both of MicroLabel's
+// defining properties — see AnnotatedList's doc comment.
 export interface Props {
   size?: 'micro' | 'label';
   muted?: boolean;

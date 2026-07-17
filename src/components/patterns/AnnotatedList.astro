@@ -3,6 +3,12 @@
 // and principles rows (columns=2: numbered marker, plain note, ruled 2-up grid) —
 // legacy-parity retuning keyed off [data-columns] since layout, marker color, and
 // note styling all diverge between the two call sites.
+//
+// `.marker` is NOT MicroLabel: holding pixel parity here means overriding both of
+// MicroLabel's defining properties (letter-spacing and font-weight) per variant —
+// the arrow marker carries no tracking or weight at all, the principles numeral
+// needs neither MicroLabel's --tracking-caps-2 nor its font-weight:500. Reusing it
+// would mean immediately overriding everything it exists to provide.
 interface AnnotatedItem {
   lead: string;
   note?: string;
@@ -22,7 +28,7 @@ const { items, columns = 1, as: Tag = 'ul', class: className, ...rest } = Astro.
 <Tag class:list={['annotated-list', className]} data-columns={columns} {...rest}>
   {items.map(({ lead, note, marker }: AnnotatedItem) => (
     <li class="row">
-      {marker && <span class="marker">{marker}</span>}
+      {marker && <span class="marker" aria-hidden={columns === 1 || undefined}>{marker}</span>}
       <span class="body">
         <strong class="lead">{lead}</strong>
         {note && <em class="note"> {note}</em>}
