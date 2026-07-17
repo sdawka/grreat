@@ -109,8 +109,11 @@ const { items, columns = 1, as: Tag = 'ul', class: className, ...rest } = Astro.
     .annotated-list[data-columns='2'] .row:nth-child(even) {
       border-inline-end: 0;
     }
-    .annotated-list[data-columns='2'] .row:nth-last-child(-n + 2) {
+    .annotated-list[data-columns='2'] .row:nth-last-child(2):nth-child(odd) {
       border-block-end: 0;
+    }
+    .annotated-list[data-columns='2'] .row:last-child:nth-child(odd) {
+      border-inline-end: 0;
     }
   }
 </style>
