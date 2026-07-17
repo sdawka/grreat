@@ -115,6 +115,15 @@
   --grid-legacy-highlight-owner: 8.125rem;    /* 130px — ownership column track (≥34rem container) */
   --space-legacy-highlight-copy-x: 1.5625rem; /* 25px — now-copy inline padding */
   --leading-legacy-highlight-action: 1.18;    /* .now-action-text line-height */
+
+  /* Legacy-parity values (Step 4c: Input, Button, StatusMessage, SignupForm) —
+     email-input sizing and status-message leading that don't land on the
+     collapsed scales, plus SignupForm's own call-site retune of Button's
+     horizontal padding. */
+  --space-legacy-14: 0.875rem;       /* 14px — Input horizontal padding; privacy-note margin-top */
+  --text-legacy-input: 1rem;         /* 16px — Input font-size (≥16px prevents iOS focus zoom) */
+  --leading-legacy-status: 1.4;      /* .form-message line-height */
+  --space-legacy-btn-x: 1.375rem;    /* 22px — Button --btn-pad-x retune at the SignupForm call site */
 }
 
 /* Breakpoint convention (vars can't feed media queries — this comment IS the token):

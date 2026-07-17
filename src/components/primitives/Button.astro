@@ -1,0 +1,56 @@
+---
+export interface Props {
+  variant?: 'solid' | 'outline' | 'ghost';
+  size?: 'md' | 'sm';
+  type?: 'button' | 'submit';
+  href?: string;
+  full?: boolean;
+  class?: string;
+}
+const { variant = 'solid', size = 'md', type = 'button', href, full = false, class: className, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class:list={['btn', className]}
+  data-variant={variant}
+  data-size={size}
+  data-full={full || undefined}
+  {...(href ? { href } : { type })}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    /* component tokens — the retuning API for parents/themes */
+    --btn-bg: var(--surface-inverse);
+    --btn-fg: var(--text-inverse);
+    --btn-border: var(--border-strong);
+    --btn-bg-hover: var(--surface-accent);
+    --btn-fg-hover: var(--text-strong);
+    --btn-pad-y: var(--space-3);
+    --btn-pad-x: var(--space-6);
+
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--space-2);
+    padding: var(--btn-pad-y) var(--btn-pad-x);
+    border: var(--border-2) solid var(--btn-border);
+    border-radius: var(--radius);
+    background: var(--btn-bg); color: var(--btn-fg);
+    font-family: var(--mono); font-size: var(--text-2); font-weight: 500;
+    text-transform: uppercase; letter-spacing: var(--tracking-caps-2);
+    text-decoration: none; cursor: pointer;
+    transition: background var(--duration-fast), color var(--duration-fast);
+  }
+  .btn:hover { background: var(--btn-bg-hover); color: var(--btn-fg-hover); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn[data-variant='outline'] { --btn-bg: transparent; --btn-fg: var(--text-strong); }
+  .btn[data-variant='ghost']   { --btn-bg: transparent; --btn-fg: var(--text-strong); border-color: transparent; }
+  .btn[data-size='sm']         { --btn-pad-y: var(--space-2); --btn-pad-x: var(--space-4); }
+  .btn[data-full]              { inline-size: 100%; }
+  /* No viewport query ⊕: width is the CALLER's concern (Switcher/container decides). */
+  /* Focus: global :focus-visible ring only — no per-component override. */
+</style>

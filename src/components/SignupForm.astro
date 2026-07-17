@@ -1,37 +1,100 @@
 ---
 import VisuallyHidden from './primitives/VisuallyHidden.astro';
+import Switcher from './layout/Switcher.astro';
+import Input from './primitives/Input.astro';
+import Button from './primitives/Button.astro';
+import StatusMessage from './patterns/StatusMessage.astro';
 
-// Reusable signup form. Each rendered instance initializes independently.
+// Reusable signup form. Each rendered instance initializes independently;
+// the status id is randomized per instance so aria-describedby still
+// resolves to THIS instance's own StatusMessage when the form appears
+// twice on one page (Masthead + SecondaryCTA).
+const statusId = `signup-status-${crypto.randomUUID().slice(0, 8)}`;
 ---
 
-<form class="signup-form" data-signup-form novalidate aria-label="Waitlist signup">
+<form
+  class="signup-form"
+  data-signup-form
+  novalidate
+  aria-label="Waitlist signup"
+  aria-describedby={statusId}
+>
   <VisuallyHidden as="div" aria-hidden="true">
     <label>Leave this empty
       <input type="text" name="website" tabindex="-1" autocomplete="off" />
     </label>
   </VisuallyHidden>
 
-  <div class="field">
+  <Switcher class="signup-fields" gap={0}>
     <label>
-      <span class="sr-only">Email address</span>
-      <input
-        type="email"
-        name="email"
-        placeholder="you@example.com"
-        required
-        autocomplete="email"
-      />
+      <VisuallyHidden as="span">Email address</VisuallyHidden>
+      <Input type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
     </label>
-  </div>
-
-  <button type="submit">Join waitlist</button>
+    <Button type="submit">Join waitlist</Button>
+  </Switcher>
 </form>
 
-<div class="form-message" role="status" aria-live="polite"></div>
+<StatusMessage id={statusId} state="idle" />
 
 <p class="privacy-note">
   No spam. We never share your data. Unsubscribe at any time.
 </p>
+
+<style>
+  /* Layer-3 retunes below all cross into Switcher/Button/Input's own
+     rendered roots, so they need :global() — those elements aren't part
+     of this component's own scoped template. `.signup-fields` is a
+     specific enough hook that the broadened match is safe.
+
+     Below 48rem, Switcher's own-width flip already stacks input+button
+     (matches the pre-migration ≤760px media query almost exactly: 760px
+     ≈ 47.5rem). The base rules below reproduce that stacked look — full
+     border on the input, an 8px top margin on the button standing in for
+     legacy's `gap: 8px` (Switcher's own --switcher-gap is set via an
+     inline style attribute — Card's --card-pad pattern — so it can't be
+     retuned from an external rule; the margin achieves the same spacing
+     without fighting that precedence).
+
+     At/above 48rem the pair joins into one seamless control, same as
+     legacy: the input's shared-edge border drops so the button's own
+     border reads as the seam, and the button gets pixel-parity padding/
+     height retunes (§5c's defaults render a few px shorter/wider). */
+  :global(.signup-fields) {
+    max-width: 32.5rem; /* 520px — legacy .signup-form max-width */
+  }
+
+  :global(.signup-fields .btn) {
+    flex-grow: 0;
+    height: var(--space-9);
+    margin-block-start: var(--space-2);
+    white-space: nowrap;
+    --btn-pad-x: var(--space-legacy-btn-x);
+  }
+
+  .privacy-note {
+    margin-block-start: var(--space-legacy-14);
+    max-width: 32.5rem;
+    font-family: var(--mono);
+    /* Below 48rem: legacy's micro-type floor (functional text ≥12px). */
+    font-size: var(--text-2);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  /* Override order matters here: these three rules must come after the
+     base declarations above (equal specificity, mobile-first cascade). */
+  @media (min-width: 48rem) {
+    :global(.signup-fields .btn) {
+      margin-block-start: 0;
+    }
+    :global(.signup-fields .input) {
+      border-inline-end: 0;
+    }
+    .privacy-note {
+      font-size: var(--text-1);
+    }
+  }
+</style>
 
 <script>
   interface SignupResponse {
@@ -46,15 +109,17 @@ import VisuallyHidden from './primitives/VisuallyHidden.astro';
 
     const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]')!;
     const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-    const messageEl = form.nextElementSibling as HTMLDivElement;
+
+    const statusId = form.getAttribute('aria-describedby');
+    const statusEl = statusId ? document.getElementById(statusId) : null;
+    if (!statusEl) return;
 
     function setState(
       state: 'idle' | 'submitting' | 'success' | 'error' | 'config-error',
       message: string,
     ) {
-      messageEl.textContent = message;
-      messageEl.className = 'form-message';
-      if (state !== 'idle' && state !== 'submitting') messageEl.classList.add(state);
+      statusEl!.textContent = message;
+      statusEl!.dataset.state = state === 'submitting' ? 'idle' : state === 'config-error' ? 'warning' : state;
       submitBtn.disabled = state === 'submitting';
       emailInput.disabled = state === 'submitting';
     }

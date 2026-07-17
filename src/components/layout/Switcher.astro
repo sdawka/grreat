@@ -1,0 +1,35 @@
+---
+// Row→column flip keyed to the switcher's own inline size (Every Layout's
+// "Switcher"), not a viewport query. Each child grows/shrinks between the two
+// states via the flex-basis formula below: once the container can't fit two
+// children at >= threshold each, they wrap onto their own full-width line.
+export interface Props {
+  threshold?: string;
+  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  as?: string;
+  class?: string;
+}
+
+const { threshold = '28rem', gap = 0, as: Tag = 'div', class: className, ...rest } = Astro.props;
+const switcherGap = gap === 0 ? '0' : `var(--space-${gap})`;
+---
+
+<Tag
+  class:list={['switcher', className]}
+  style={`--switcher-threshold: ${threshold}; --switcher-gap: ${switcherGap}`}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--switcher-gap);
+  }
+  .switcher > :global(*) {
+    flex-grow: 1;
+    flex-basis: calc((var(--switcher-threshold) - 100%) * 999);
+  }
+</style>

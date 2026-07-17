@@ -19,10 +19,13 @@
   --focus-ring: var(--yellow);
   --shadow-hard: var(--shadow-offset) var(--shadow-offset) 0 var(--border-strong);
 
-  /* Feedback — decoupled from bucket colors so they can diverge */
-  --feedback-error:   var(--red);
-  --feedback-success: var(--green);
-  --feedback-warning: var(--orange);
+  /* Feedback — decoupled from bucket colors so they can diverge. Error/success/
+     warning use the AA-safe "-text" primitives (legacy .form-message.success/
+     .error/.config-error colors) since these are always read as small on-paper
+     text; info stays on the plain hue (no legacy on-paper usage yet). */
+  --feedback-error:   var(--red-text);
+  --feedback-success: var(--green-text);
+  --feedback-warning: var(--orange-text);
   --feedback-info:    var(--blue);
 
   /* Category (bucket) palette */
