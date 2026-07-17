@@ -1,0 +1,18 @@
+---
+import Section from '../layout/Section.astro';
+import Prose from '../primitives/Prose.astro';
+import AnnotatedList from '../patterns/AnnotatedList.astro';
+import { corePrinciples } from '../../content/corePrinciples';
+
+// Principles: cyclical not linear, always a next action, surface blockers early —
+// the philosophy the rest of the system (feedback loops, constraints) implements
+const items = corePrinciples.map((p, i) => ({ ...p, marker: String(i + 1).padStart(2, '0') }));
+---
+
+<Section title="Principles">
+  <Prose slot="intro" measure={false}>
+    Three ideas the rest of the system is built to serve.
+  </Prose>
+
+  <AnnotatedList items={items} columns={2} as="ol" />
+</Section>

@@ -12,7 +12,7 @@ export const buckets: Bucket[] = [
     bucket: 'goals',
     letter: 'G',
     name: 'Goals',
-    desc: 'Define what success looks like. Objectives are revisable, not set in stone — they evolve as analysis feeds back.',
+    desc: 'Define what success looks like. A goal runs as a project (driven to completion) or a program (steered for consistent improvement on a metric) — both with revisable desired outcomes that evolve as analysis feeds back.',
   },
   {
     bucket: 'research',
@@ -30,7 +30,7 @@ export const buckets: Bucket[] = [
     bucket: 'execution',
     letter: 'E',
     name: 'Execution',
-    desc: 'The doing. Every active project has exactly one primary next action and an explicit owner.',
+    desc: 'The doing. Every active project has a clear primary next action and an explicit owner.',
   },
   {
     bucket: 'analysis',

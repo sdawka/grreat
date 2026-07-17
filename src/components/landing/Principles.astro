@@ -4,15 +4,15 @@ import Prose from '../primitives/Prose.astro';
 import AnnotatedList from '../patterns/AnnotatedList.astro';
 import { principles } from '../../content/principles';
 
-// Principles: exactly one next action, explicit owner, WIP max 5, queue max 3,
-// no orphaned projects, proposal-only structural changes
+// Constraints & choices: explicit owner, WIP max 5, no orphaned projects,
+// proposal-only structural changes
 const items = principles.map((p, i) => ({ ...p, marker: String(i + 1).padStart(2, '0') }));
 ---
 
-<Section title="Principles">
+<Section title="Constraints & choices">
   <Prose slot="intro" measure={false}>
-    The system enforces a small set of hard constraints. These are not suggestions — they are
-    invariants that keep the operating system from degrading.
+    Beyond the principles, the system enforces a small set of hard constraints and asks for
+    a few deliberate choices — the guardrails that keep it from degrading.
   </Prose>
 
   <AnnotatedList items={items} columns={2} as="ol" />
