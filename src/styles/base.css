@@ -30,7 +30,7 @@ textarea {
 }
 
 a {
-  color: var(--ink);
+  color: var(--text-strong);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
