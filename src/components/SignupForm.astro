@@ -60,7 +60,7 @@ const statusId = `signup-status-${crypto.randomUUID().slice(0, 8)}`;
      border reads as the seam, and the button gets pixel-parity padding/
      height retunes (§5c's defaults render a few px shorter/wider). */
   :global(.signup-fields) {
-    max-width: 32.5rem; /* 520px — legacy .signup-form max-width */
+    max-width: var(--size-legacy-signup-max);
   }
 
   :global(.signup-fields .btn) {
@@ -73,7 +73,7 @@ const statusId = `signup-status-${crypto.randomUUID().slice(0, 8)}`;
 
   .privacy-note {
     margin-block-start: var(--space-legacy-14);
-    max-width: 32.5rem;
+    max-width: var(--size-legacy-signup-max);
     font-family: var(--mono);
     /* Below 48rem: legacy's micro-type floor (functional text ≥12px). */
     font-size: var(--text-2);
