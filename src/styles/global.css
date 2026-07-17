@@ -1,10 +1,8 @@
 /* GRREAT — cascade orchestrator. APPEND-CLOSED: do not add styles here.
    New styling goes in tokens/, base.css, utilities.css, or a component's
-   scoped <style>. Scoped component styles are unlayered → always win.
-   The legacy layer below is deleted block-by-block during migration
-   (docs/design-system.md §6). */
+   scoped <style>. Scoped component styles are unlayered → always win. */
 
-@layer tokens, base, utilities, legacy;
+@layer tokens, base, utilities;
 @import './tokens/primitives.css' layer(tokens);
 @import './tokens/semantic.css' layer(tokens);
 @import './tokens/themes.css' layer(tokens);
@@ -53,37 +51,4 @@
   ascent-override: 101.06%;
   descent-override: 27.11%;
   line-gap-override: 0%;
-}
-
-/* ── LEGACY — The Working Edition (Signup Page) ──────────────────────────
-   Visual language: warm paper, dense black ink, oversized DM Serif Display,
-   IBM Plex Mono/Sans, numbered Swiss/editorial index, hard rules,
-   high-contrast yellow panel, bucket-specific colors, colophon.
-   Shrinks to zero as components migrate to scoped styles. */
-@layer legacy {
-  /* Skip link — hidden until keyboard focus */
-  .skip-link {
-    position: absolute;
-    top: -100%;
-    left: 24px;
-    z-index: 100;
-    padding: 10px 16px;
-    background: var(--ink);
-    color: var(--paper);
-    font: 0.8125rem var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-  }
-
-  .skip-link:focus {
-    top: 8px;
-  }
-
-  /* ── Layout shell — single-column for signup, no sidebar ── */
-  .shell {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
 }
