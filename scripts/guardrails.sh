@@ -10,8 +10,10 @@ hits=$(grep -rnE '#[0-9a-fA-F]{3,6}\b' src --include='*.css' --include='*.astro'
   | grep -v '^src/styles/tokens/' | grep -v 'name="theme-color"')
 if [ -n "$hits" ]; then echo "$hits"; echo "FAIL: hex code(s) outside src/styles/tokens/"; fail=1; fi
 
-echo "guardrail: inline style=\" in .astro (excluding --custom-property injection)"
-hits=$(grep -rn 'style="' src --include='*.astro' | grep -v -- '--' | grep -vE ':[0-9]+:[[:space:]]*//')
+echo "guardrail: inline style in .astro (excluding --custom-property injection)"
+# Matches both style="..." attributes and Astro's style={`...`} expression syntax;
+# --custom-property injection (the sanctioned mechanism) and comment lines are excluded.
+hits=$(grep -rnE 'style=[{"]' src --include='*.astro' | grep -v -- '--' | grep -vE ':[0-9]+:[[:space:]]*//')
 if [ -n "$hits" ]; then echo "$hits"; echo "FAIL: inline style attribute found"; fail=1; fi
 
 echo "guardrail: max-width: inside @media"
