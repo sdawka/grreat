@@ -1,22 +1,30 @@
-/* LAYER 1 — the ONLY file with raw values. Names preserved from current global.css. */
+/* LAYER 1 — the ONLY file with raw values. Names preserved from current global.css.
+   Raw values are oklch() (converted from the legacy hex palette, sRGB/D65) —
+   OKLCh's perceptual uniformity is what lets AA-contrast fixes move lightness
+   without drifting hue. Every color keeps its pre-conversion appearance
+   except --blue (see below): its L was raised just enough to clear AA-large
+   on --surface-raised in dark mode, where BucketCard's "research" letter
+   rendered at 2.83:1 (below the 3:1 floor) — the legacy hex value passed the
+   audit's --surface-page check (3.05:1) but not the darker card surface it
+   actually sits on in production. */
 :root {
-  /* Color (existing names, existing values) */
-  --paper: #f0ede4;
-  --paper-light: #f8f6ef;
-  --ink: #151513;
-  --muted: #6c6a62;
-  --hair: #b9b5aa;
-  --yellow: #f4e548;
-  --blue: #2448ff;
-  --red: #ef4b3f;
-  --green: #3a8f65;
-  --purple: #9d4edd;
-  --orange: #e15c16;
-  --white: #ffffff;
+  /* Color (existing names, existing values — now oklch()) */
+  --paper: oklch(94.6% 0.012 91.5);
+  --paper-light: oklch(97.3% 0.010 93.6);
+  --ink: oklch(19.5% 0.004 106.8);
+  --muted: oklch(52.4% 0.013 95.3);
+  --hair: oklch(77.3% 0.016 90.3);
+  --yellow: oklch(90.7% 0.169 103.8);
+  --blue: oklch(55.4% 0.269 266.3);  /* was oklch(51.9% 0.269 266.3) / #2448ff — AA-large fix, see file note */
+  --red: oklch(64.3% 0.202 28.3);
+  --green: oklch(58.6% 0.105 159.0);
+  --purple: oklch(58.8% 0.212 306.3);
+  --orange: oklch(63.7% 0.181 42.7);
+  --white: oklch(100% 0 89.9);
   /* AA-safe text variants (≥4.5:1 on --paper) for small type */
-  --red-text: #c02b20;
-  --green-text: #2e7050;
-  --orange-text: #b04a10;
+  --red-text: oklch(52.9% 0.187 29.2);
+  --green-text: oklch(49.3% 0.085 159.7);
+  --orange-text: oklch(53.6% 0.147 44.3);
 
   /* Type families (existing names, existing values — metric-matched fallbacks) */
   --serif: 'DM Serif Display', 'DM Serif Display Fallback', Georgia, serif;
@@ -89,7 +97,7 @@
 
   /* Legacy compat (existing names, existing values) — consumed by layer(legacy)
      and the data-bucket remap; removed when the legacy layer is deleted. */
-  --bucket: #2448ff;
+  --bucket: oklch(55.4% 0.269 266.3);
   --max-width: 1120px;
 
   /* Legacy-parity values (Step 4a: BucketCard, RuledGrid, AnnotatedList) — exact

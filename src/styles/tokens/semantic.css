@@ -14,6 +14,13 @@
   --text-on-inverse: var(--paper);       /* text on --surface-inverse fills (kicker chip, skip-link);
                                             legacy used --paper, NOT paper-light — kept distinct so it
                                             can diverge from --text-inverse without touching call sites */
+  --text-on-accent: var(--ink);          /* text on --surface-accent fills (Button hover, HighlightCard).
+                                             Deliberately NOT --text-strong: --surface-accent stays yellow
+                                             in both themes (brand accent survives inversion), but
+                                             --text-strong flips to a light color in dark mode, which
+                                             dropped this pairing to 1.05:1 (unreadable) on the yellow
+                                             fill. --ink is theme-invariant like --surface-accent, so the
+                                             pairing stays correct without a themes.css override. */
   --text-link-hover: var(--blue);
 
   --border-strong: var(--ink);             /* structural rules, card edges */

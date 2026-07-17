@@ -39,5 +39,6 @@ const cardPad = pad === 0 ? '0' : `var(--space-${pad})`;
     --card-bg: var(--surface-accent);
     --card-shadow: var(--shadow-hard);
     --card-margin-end: var(--shadow-offset);
+    color: var(--text-on-accent); /* not inherited --text-strong: fails AA on the yellow fill in dark mode */
   }
 </style>
