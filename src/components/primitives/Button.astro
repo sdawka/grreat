@@ -29,7 +29,7 @@ const Tag = href ? 'a' : 'button';
     --btn-fg: var(--text-inverse);
     --btn-border: var(--border-strong);
     --btn-bg-hover: var(--surface-accent);
-    --btn-fg-hover: var(--text-strong);
+    --btn-fg-hover: var(--text-on-accent); /* not --text-strong: fails AA on the yellow fill in dark mode */
     --btn-pad-y: var(--space-3);
     --btn-pad-x: var(--space-6);
 

@@ -1,21 +1,23 @@
-/* Dark-mode readiness — ship the file, not the toggle. */
+/* Dark-mode readiness — ship the file, not the toggle.
+   Raw values are oklch() (same sRGB/D65 conversion as primitives.css); this
+   file overrides Layer-2 roles, so it's the one other place raw color lives. */
 [data-theme='dark'] {
   color-scheme: dark;
-  --surface-page: #14130f;   --surface-raised: #1c1b16;  --surface-focus: #262620;
+  --surface-page: oklch(18.6% 0.008 95.5);   --surface-raised: oklch(22.1% 0.010 97.8);  --surface-focus: oklch(26.6% 0.011 107.1);
   --surface-inverse: var(--paper-light);
-  --text-strong: #eae7dc;    --text-muted: #99968b;      --text-inverse: #14130f;
-  --text-on-inverse: #14130f;  /* on the now-light --surface-inverse (paper-light) */
-  --text-link-hover: #7c93ff;
-  --border-strong: #eae7dc;  --border-hair: #3a382f;
+  --text-strong: oklch(92.7% 0.015 94.2);    --text-muted: oklch(67.2% 0.016 94.3);      --text-inverse: oklch(18.6% 0.008 95.5);
+  --text-on-inverse: oklch(18.6% 0.008 95.5);  /* on the now-light --surface-inverse (paper-light) */
+  --text-link-hover: oklch(69.4% 0.160 272.5);
+  --border-strong: oklch(92.7% 0.015 94.2);  --border-hair: oklch(34.0% 0.015 96.8);
   --focus-ring: var(--yellow);
   /* Feedback — the light-mode -text primitives were darkened for AA on paper,
      so they fail (dark-on-dark) here. Lightened per hue to ≥4.5:1 on --surface-page.
      --surface-accent/--focus-ring stay yellow: brand accent survives inversion.
      Bucket colors also stay (they render only as 40px display letters ≥ AA-large). */
-  --feedback-error:   #f26a5c;
-  --feedback-success: #56c08a;
-  --feedback-warning: #e8925a;
-  --feedback-info:    #7c93ff;
+  --feedback-error:   oklch(68.9% 0.170 28.2);
+  --feedback-success: oklch(73.1% 0.127 158.7);
+  --feedback-warning: oklch(73.7% 0.127 52.6);
+  --feedback-info:    oklch(69.4% 0.160 272.5);
   /* --surface-accent stays yellow: brand accent survives inversion; --focus-ring
      matches for the same reason (it shares --surface-accent's value in light mode) */
 }
