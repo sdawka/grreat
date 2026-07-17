@@ -16,6 +16,18 @@ const executionItems = [
   { marker: '←', lead: 'Execution → Roadmap', note: "— Scope wrong? Propose a structural change, don't ad-lib." },
   { marker: '←', lead: 'Execution → Time', note: '— Estimate mismatch? Feed back actuals to recalibrate.' },
 ];
+
+const timeItems = [
+  { marker: '←', lead: 'Time → Roadmap', note: '— Actuals drifting from estimates? Recalibrate the sequence ahead.' },
+  { marker: '←', lead: 'Time → Goals', note: '— Chronic overrun? Re-check whether the goal is scoped right.' },
+  { marker: '←', lead: 'Time → Research', note: '— Stuck on unknowns? Name what to learn to move faster.' },
+];
+
+const researchItems = [
+  { marker: '←', lead: 'Research → Goals', note: '— A finding changes the stakes? Reframe what success means.' },
+  { marker: '←', lead: 'Research → Roadmap', note: "— Harder than scoped? Resequence around what you learned." },
+  { marker: '←', lead: 'Research → Execution', note: '— Found a better path? Hand execution the change, not a surprise.' },
+];
 ---
 
 <Section title="Cyclical, not linear" id="feedback">
@@ -33,6 +45,16 @@ const executionItems = [
     <Card>
       <h3>Execution-driven corrections</h3>
       <AnnotatedList items={executionItems} />
+    </Card>
+
+    <Card>
+      <h3>Time-driven recalibration</h3>
+      <AnnotatedList items={timeItems} />
+    </Card>
+
+    <Card>
+      <h3>Research-driven pivots</h3>
+      <AnnotatedList items={researchItems} />
     </Card>
   </div>
 </Section>
