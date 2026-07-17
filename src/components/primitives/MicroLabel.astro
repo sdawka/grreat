@@ -1,0 +1,46 @@
+---
+// THE mono-caps microlabel — the single source for the small uppercase
+// tracked-mono treatment used across folios and kickers. Not for list-index
+// numerals (AnnotatedList's `.marker`): those need their own tracking/weight
+// per row-anatomy variant, which would mean overriding both of MicroLabel's
+// defining properties — see AnnotatedList's doc comment.
+export interface Props {
+  size?: 'micro' | 'label';
+  muted?: boolean;
+  as?: string;
+  class?: string;
+}
+
+const { size = 'label', muted = false, as: Tag = 'span', class: className, ...rest } = Astro.props;
+---
+
+<Tag
+  class:list={['micro-label', className]}
+  data-size={size}
+  data-muted={muted || undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .micro-label {
+    font-family: var(--mono);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-2);
+    color: var(--text-strong);
+  }
+
+  .micro-label[data-size='micro'] {
+    font-size: var(--text-1);
+  }
+
+  .micro-label[data-size='label'] {
+    font-size: var(--text-2);
+  }
+
+  .micro-label[data-muted] {
+    color: var(--text-muted);
+  }
+</style>

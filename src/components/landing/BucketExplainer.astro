@@ -1,0 +1,14 @@
+---
+import Section from '../layout/Section.astro';
+import RuledGrid from '../primitives/RuledGrid.astro';
+import BucketCard from '../patterns/BucketCard.astro';
+import { buckets } from '../../content/buckets';
+
+// Visual six-bucket explainer using G / R¹ / R² / E / A / T
+---
+
+<Section title="Six persistent buckets" id="buckets">
+  <RuledGrid min="var(--grid-min-legacy-bucket)">
+    {buckets.map((b) => <BucketCard {...b} />)}
+  </RuledGrid>
+</Section>

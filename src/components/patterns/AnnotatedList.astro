@@ -1,0 +1,116 @@
+---
+// Shared row anatomy for feedback rows (columns=1: arrow marker, muted small note)
+// and principles rows (columns=2: numbered marker, plain note, ruled 2-up grid) —
+// legacy-parity retuning keyed off [data-columns] since layout, marker color, and
+// note styling all diverge between the two call sites.
+//
+// `.marker` is NOT MicroLabel: holding pixel parity here means overriding both of
+// MicroLabel's defining properties (letter-spacing and font-weight) per variant —
+// the arrow marker carries no tracking or weight at all, the principles numeral
+// needs neither MicroLabel's --tracking-caps-2 nor its font-weight:500. Reusing it
+// would mean immediately overriding everything it exists to provide.
+interface AnnotatedItem {
+  lead: string;
+  note?: string;
+  marker?: string;
+}
+
+export interface Props {
+  items: AnnotatedItem[];
+  columns?: 1 | 2;
+  as?: string;
+  class?: string;
+}
+
+const { items, columns = 1, as: Tag = 'ul', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['annotated-list', className]} data-columns={columns} {...rest}>
+  {items.map(({ lead, note, marker }: AnnotatedItem) => (
+    <li class="row">
+      {marker && <span class="marker" aria-hidden={columns === 1 || undefined}>{marker}</span>}
+      <span class="body">
+        <strong class="lead">{lead}</strong>
+        {note && <em class="note"> {note}</em>}
+      </span>
+    </li>
+  ))}
+</Tag>
+
+<style>
+  .annotated-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--sans);
+    font-size: var(--text-3);
+    line-height: var(--leading-normal);
+  }
+
+  .marker {
+    font-family: var(--mono);
+  }
+
+  .lead {
+    font-weight: 600;
+  }
+
+  .note {
+    font-style: normal;
+  }
+
+  /* columns=1 — feedback rows: flat inline flow, bottom hairline per row */
+  .annotated-list[data-columns='1'] .row {
+    padding-block: var(--space-2);
+    border-block-end: var(--border-1) solid var(--border-hair);
+  }
+  .annotated-list[data-columns='1'] .row:last-child {
+    border-block-end: 0;
+  }
+  .annotated-list[data-columns='1'] .body {
+    display: contents;
+  }
+  .annotated-list[data-columns='1'] .marker {
+    color: var(--feedback-info);
+  }
+  .annotated-list[data-columns='1'] .note {
+    color: var(--text-muted);
+    font-size: var(--text-legacy-note-sm);
+  }
+
+  /* columns=2 — principles rows: ruled 2-up grid, mobile-first single column */
+  .annotated-list[data-columns='2'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    border: var(--border-1) solid var(--border-strong);
+  }
+  .annotated-list[data-columns='2'] .row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-legacy-10);
+    padding: var(--space-4) var(--gutter-legacy-min);
+    border-block-end: var(--border-1) solid var(--border-hair);
+  }
+  .annotated-list[data-columns='2'] .row:last-child {
+    border-block-end: 0;
+  }
+  .annotated-list[data-columns='2'] .marker {
+    min-inline-size: var(--space-legacy-marker-min);
+    font-size: var(--text-1);
+    color: var(--text-muted);
+  }
+  @media (min-width: 48rem) {
+    .annotated-list[data-columns='2'] {
+      grid-template-columns: 1fr 1fr;
+    }
+    .annotated-list[data-columns='2'] .row {
+      border-inline-end: var(--border-1) solid var(--border-hair);
+    }
+    .annotated-list[data-columns='2'] .row:nth-child(even) {
+      border-inline-end: 0;
+    }
+    .annotated-list[data-columns='2'] .row:nth-last-child(-n + 2) {
+      border-block-end: 0;
+    }
+  }
+</style>

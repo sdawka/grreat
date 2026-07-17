@@ -2,6 +2,13 @@
 
 **Status:** adopted. Winner of a 3-proposal, 3-judge evaluation (Ink & Paper 98, Typecase 98, pragmatic-hybrid 97; 2/3 judges chose Ink & Paper as the base). Grafted-in ideas from the other two are marked ⊕ throughout.
 
+Steps 0-6 shipped (branch `design/ink-paper-steps-2-6`, 2026-07). Fonts were
+already self-hosted pre-migration. Pixel parity held throughout except two
+plan-mandated deltas: the 10px type floor and RuledGrid's 1px gap. MicroLabel
+and Rule shipped per the component inventory but are currently unwired —
+parity requirements disqualified MicroLabel's call-site candidates. `Field`
+remains inventoried only (future app forms); it was never built.
+
 **Principle:** every visual decision is a CSS custom property; every component is a plain `.astro` file with a scoped `<style>` that consumes tokens and exposes variants via `data-*` attributes remapping local custom properties — the pattern the codebase already proves with `--bucket`. No Tailwind, no Sass, no PostCSS, no client runtime.
 
 **ADR — Tailwind rejected** ⊕: the site has ~6 recurring utility-shaped patterns; a framework buys 40k classes and a second dialect to cover six. Revisit only if the authenticated app grows dozens of dense data-UI screens.

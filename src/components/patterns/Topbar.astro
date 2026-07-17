@@ -1,0 +1,75 @@
+---
+import Cluster from '../layout/Cluster.astro';
+
+// Top bar with folio and page number. No Container: legacy `.topbar` spans
+// the full viewport edge-to-edge (no max-width/margin-auto) — only
+// Masthead/Footer carry that recipe, so it doesn't apply here.
+export interface Props {
+  folio?: string;
+  pageNo?: string;
+  class?: string;
+}
+
+const {
+  folio = 'VOL. 01   /   WORKING EDITION',
+  pageNo = '00',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Cluster
+  as="header"
+  role="banner"
+  class:list={['topbar', className]}
+  gap={0}
+  align="center"
+  justify="between"
+  {...rest}
+>
+  <span class="folio">{folio}</span>
+  <slot name="nav" />
+  <span class="page-no">{pageNo}</span>
+</Cluster>
+
+<style>
+  /* Cluster's own scoped base rule compiles to `.cluster[data-astro-cid-*]`
+     (specificity 0,2,0) — a bare `:global(.topbar)` (0,1,0) loses to it
+     outright. Pairing both classes present on the rendered element ties
+     specificity; source order (this file compiles after its Cluster import)
+     decides. */
+  :global(.cluster.topbar) {
+    height: var(--space-legacy-46);
+    padding-inline-start: var(--space-4);
+    border-block-end: var(--border-1) solid var(--border-strong);
+    font-family: var(--mono);
+    font-size: var(--text-legacy-number-sm); /* 11px — legacy mobile micro-type floor */
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-1);
+  }
+  @media (min-width: 48rem) {
+    :global(.cluster.topbar) {
+      padding-inline-start: var(--space-legacy-28);
+      font-size: var(--text-1); /* legacy desktop value is 9px; floored, accepted deviation */
+    }
+  }
+
+  .folio {
+    display: none;
+    color: var(--text-muted);
+  }
+  @media (min-width: 48rem) {
+    .folio {
+      display: inline;
+    }
+  }
+
+  .page-no {
+    height: 100%;
+    width: var(--space-legacy-42);
+    border-inline-start: var(--border-1) solid var(--border-strong);
+    display: grid;
+    place-items: center;
+    font-size: var(--text-2);
+  }
+</style>

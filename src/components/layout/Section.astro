@@ -1,0 +1,94 @@
+---
+// The ×5 copy-pasted section scaffold + manual "NN /" numbering, unified.
+// Auto-numbers via the CSS counter reset on <body> (base.css); pass `number`
+// only when the editorial order needs to diverge from document order.
+export interface Props {
+  title: string;
+  number?: string; // omit → auto CSS counter; pass to override
+  id?: string; // omit → slug derived from title
+  rule?: boolean;
+  class?: string;
+  style?: string; // legacy-parity retuning: --section-pad-bottom / --section-intro-measure / --section-intro-margin
+}
+
+const { title, number, id, rule = true, class: className, ...rest } = Astro.props;
+const slug = id ?? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+---
+
+{rule && <hr class="rule" aria-hidden="true" />}
+<section class:list={['section', className]} aria-labelledby={`${slug}-title`} {...rest}>
+  <header class="header">
+    <span class="number" aria-hidden="true">{number ? `${number} /` : null}</span>
+    <h2 id={`${slug}-title`} class="title">{title}</h2>
+  </header>
+  {Astro.slots.has('intro') && <div class="intro"><slot name="intro" /></div>}
+  <slot />
+</section>
+
+<style>
+  .rule {
+    border: 0;
+    border-top: var(--border-1) solid var(--border-hair);
+    margin: 0 auto; /* zero block margin overrides the UA <hr> default */
+    inline-size: calc(100% - 2 * var(--gutter-legacy-min));
+  }
+  @media (min-width: 48rem) {
+    .rule {
+      inline-size: calc(100% - 2 * var(--gutter-legacy-max));
+    }
+  }
+
+  .section {
+    counter-increment: section; /* base.css: body { counter-reset: section } */
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    padding-block-start: var(--space-8);
+    padding-inline: var(--gutter-legacy-min);
+    padding-block-end: var(--section-pad-bottom, 0);
+  }
+  @media (min-width: 48rem) {
+    .section {
+      padding-block-start: var(--space-10);
+      padding-inline: var(--gutter-legacy-max);
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-block-end: var(--space-legacy-28);
+  }
+  .number {
+    font-family: var(--mono);
+    font-size: var(--text-legacy-number-sm);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-legacy-number);
+    color: var(--text-muted);
+    min-inline-size: var(--space-legacy-number-min);
+  }
+  @media (min-width: 48rem) {
+    .number {
+      font-size: var(--text-1);
+    }
+  }
+  .number:empty::before {
+    content: counter(section, decimal-leading-zero) ' /';
+  }
+  .title {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: var(--text-d2);
+    line-height: var(--leading-legacy-title);
+    letter-spacing: var(--tracking-legacy-title);
+  }
+  .intro {
+    max-inline-size: var(--section-intro-measure, var(--measure-legacy-wide));
+    margin-block-end: var(--section-intro-margin, var(--space-6));
+    font-size: var(--text-4);
+    line-height: var(--leading-relaxed);
+    color: var(--text-muted);
+  }
+</style>

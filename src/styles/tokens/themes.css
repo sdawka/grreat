@@ -4,6 +4,10 @@
   --surface-page: #14130f;   --surface-raised: #1c1b16;  --surface-focus: #262620;
   --surface-inverse: var(--paper-light);
   --text-strong: #eae7dc;    --text-muted: #99968b;      --text-inverse: #14130f;
+  --text-on-inverse: #14130f;  /* on the now-light --surface-inverse (paper-light) */
+  --text-link-hover: #7c93ff;
   --border-strong: #eae7dc;  --border-hair: #3a382f;
-  /* --surface-accent stays yellow: brand accent survives inversion */
+  --focus-ring: var(--yellow);
+  /* --surface-accent stays yellow: brand accent survives inversion; --focus-ring
+     matches for the same reason (it shares --surface-accent's value in light mode) */
 }

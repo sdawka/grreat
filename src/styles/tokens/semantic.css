@@ -10,7 +10,10 @@
 
   --text-strong:  var(--ink);
   --text-muted:   var(--muted);
-  --text-inverse: var(--paper-light);
+  --text-inverse: var(--paper-light);   /* text on paper-light fills (filled Button) */
+  --text-on-inverse: var(--paper);       /* text on --surface-inverse fills (kicker chip, skip-link);
+                                            legacy used --paper, NOT paper-light — kept distinct so it
+                                            can diverge from --text-inverse without touching call sites */
   --text-link-hover: var(--blue);
 
   --border-strong: var(--ink);             /* structural rules, card edges */
@@ -19,10 +22,13 @@
   --focus-ring: var(--yellow);
   --shadow-hard: var(--shadow-offset) var(--shadow-offset) 0 var(--border-strong);
 
-  /* Feedback — decoupled from bucket colors so they can diverge */
-  --feedback-error:   var(--red);
-  --feedback-success: var(--green);
-  --feedback-warning: var(--orange);
+  /* Feedback — decoupled from bucket colors so they can diverge. Error/success/
+     warning use the AA-safe "-text" primitives (legacy .form-message.success/
+     .error/.config-error colors) since these are always read as small on-paper
+     text; info stays on the plain hue (no legacy on-paper usage yet). */
+  --feedback-error:   var(--red-text);
+  --feedback-success: var(--green-text);
+  --feedback-warning: var(--orange-text);
   --feedback-info:    var(--blue);
 
   /* Category (bucket) palette */

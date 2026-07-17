@@ -66,10 +66,95 @@
   --measure: 65ch;                          /* ⊕ ch-based prose measure (was ad-hoc 520/600/680px) */
   --content-max: 70rem;                     /* 1120px, keeps current --max-width value */
 
+  /* Legacy-parity prose values (Step 2 hygiene pass) — exact widths/spacing from
+     the pre-migration inline styles. --measure (65ch) doesn't reproduce them at
+     the tested viewport checkpoints, so Prose call sites pin to these instead.
+     Removed once Step 3's Section `intro` slot normalizes onto var(--measure). */
+  --measure-legacy-wide: 43.75rem;    /* 700px — FeedbackLoop/Principles/WorkingSession intro */
+  --measure-legacy-narrow: 37.5rem;   /* 600px — SecondaryCTA paragraphs */
+  --space-legacy-28: 1.75rem;         /* 28px — SecondaryCTA closing margin, between space-6/7 */
+
+  /* Legacy-parity Section values (Step 3) — the given Section spec code (§5b)
+     uses --measure/--space-6/--tracking-display/--leading-tight and --gutter's
+     continuous clamp; the pre-migration section scaffold used slightly
+     different fixed values. Pixel parity governs this migration step
+     (docs/design-system.md Task 2 controller decision), so these reproduce
+     the old numbers exactly. Candidates for removal once a future step
+     accepts the token-collapsed values. */
+  --gutter-legacy-min: 1.125rem;       /* 18px — pre-migration section/rule side padding ≤760px */
+  --gutter-legacy-max: 2.25rem;        /* 36px — pre-migration section/rule side padding >760px */
+  --tracking-legacy-title: -0.04em;    /* .section-title letter-spacing */
+  --leading-legacy-title: 1.02;        /* .section-title line-height */
+  --tracking-legacy-number: 0.1em;     /* .section-number letter-spacing */
+  --text-legacy-number-sm: 0.6875rem;  /* 11px — .section-number's ≤760px micro-type floor bump */
+  --space-legacy-number-min: 3.125rem; /* 50px — .section-number min-width */
+
   /* Legacy compat (existing names, existing values) — consumed by layer(legacy)
      and the data-bucket remap; removed when the legacy layer is deleted. */
   --bucket: #2448ff;
   --max-width: 1120px;
+
+  /* Legacy-parity values (Step 4a: BucketCard, RuledGrid, AnnotatedList) — exact
+     old numbers where the 5-step type scale / 4px space scale don't land on them.
+     Candidates for removal once a future pass accepts the collapsed values. */
+  --grid-min-legacy-bucket: 18rem;          /* RuledGrid min: reproduces bucket-grid's 3/2/1-col at 1280/768/375 */
+  --leading-legacy-bucket-letter: 0.85;     /* .bucket-letter line-height */
+  --tracking-legacy-bucket-letter: -0.05em; /* .bucket-letter letter-spacing (-2px @ --text-numeral) */
+  --space-legacy-6: 0.375rem;               /* 6px — .bucket-letter margin-bottom */
+  --leading-legacy-bucket-name: 1.2;        /* .bucket-name line-height */
+  --tracking-legacy-bucket-name: 0.05em;    /* .bucket-name letter-spacing */
+  --leading-legacy-bucket-desc: 1.55;       /* .bucket-desc line-height */
+  --text-legacy-note-sm: 0.6875rem;         /* 11px — AnnotatedList feedback-row note */
+  --space-legacy-10: 0.625rem;              /* 10px — AnnotatedList principles-row gap */
+  --space-legacy-marker-min: 1.25rem;       /* 20px — AnnotatedList principles-row marker min-width */
+  --tracking-legacy-feedback-h3: -0.5px;    /* .feedback-side h3 letter-spacing */
+
+  /* Legacy-parity values (Step 4b: HighlightCard) — now-card grid tracks, copy
+     padding, and action line-height that don't land on the space/leading scale. */
+  --grid-legacy-highlight-index: 5.625rem;    /* 90px — now-index column track (≥34rem container) */
+  --grid-legacy-highlight-owner: 8.125rem;    /* 130px — ownership column track (≥34rem container) */
+  --space-legacy-highlight-copy-x: 1.5625rem; /* 25px — now-copy inline padding */
+  --leading-legacy-highlight-action: 1.18;    /* .now-action-text line-height */
+
+  /* Legacy-parity values (Step 4c: Input, Button, StatusMessage, SignupForm) —
+     email-input sizing and status-message leading that don't land on the
+     collapsed scales, plus SignupForm's own call-site retune of Button's
+     horizontal padding. */
+  --space-legacy-14: 0.875rem;       /* 14px — Input horizontal padding; privacy-note margin-top */
+  --text-legacy-input: 1rem;         /* 16px — Input font-size (≥16px prevents iOS focus zoom) */
+  --leading-legacy-status: 1.4;      /* .form-message line-height */
+  --space-legacy-btn-x: 1.375rem;    /* 22px — Button --btn-pad-x retune at the SignupForm call site */
+  --size-legacy-signup-max: 32.5rem; /* 520px — .signup-form max-width, shared by .signup-fields + .privacy-note;
+                                         reused as-is by Masthead's hero-action lede (Step 4d — same 520px) */
+
+  /* Legacy-parity values (Step 4d: Masthead, Topbar, Footer) — wordmark/edition/
+     kicker/colophon type, and the hero/topbar/colophon box model, none of which
+     land on the collapsed scales. --text-legacy-wordmark corrects a latent bug
+     in Step 1's --text-d3 (42→78px): that token assumed the wordmark's mobile
+     floor came from the same clamp as its fluid range, but legacy actually runs
+     TWO separate clamps (a base one and a ≤500px override) — text-d3 never had
+     a real consumer to catch the mismatch until this step. This token is a
+     single clamp tuned to reproduce both legacy clamps' rendered values at the
+     3 harness checkpoints (w375/768/1280) exactly. Between those checkpoints
+     (~501-700px viewports), this single clamp interpolates differently from
+     legacy's two-clamp behavior — a known, accepted gap; do not "fix" without
+     a design decision. */
+  --text-legacy-wordmark: clamp(3.5rem, 8vw, 4.875rem); /* 56→78px */
+  --leading-legacy-wordmark: 0.83;
+  --tracking-legacy-wordmark: -0.045em;
+  --measure-legacy-tagline: 42.5rem;   /* 680px — tagline max-width */
+  --text-legacy-hero-lede: 0.9375rem;  /* 15px — hero's first lede paragraph */
+  --measure-legacy-hero-lede: 40rem;   /* 640px — hero's first lede paragraph max-width */
+  --tracking-legacy-edition: 0.14em;
+  --tracking-legacy-caps-3: 0.1em;     /* kicker + colophon tracked-mono caps — legacy's third,
+                                           never-canonicalized caps-tracking value (--tracking-caps-1/-2
+                                           cover 0.08em/0.12em; this is the remaining 0.1em) */
+  --space-legacy-42: 2.625rem;  /* 42px — topbar page-no width; hero-action margin-top */
+  --space-legacy-46: 2.875rem;  /* 46px — topbar height */
+  --space-legacy-60: 3.75rem;   /* 60px — hero padding-block-start ≥48rem */
+  --space-legacy-11: 0.6875rem; /* 11px — colophon padding-block ≥48rem */
+  --space-legacy-5: 0.3125rem;  /* 5px — kicker chip padding-block; .reg margin-inline-start */
+  --space-legacy-7: 0.4375rem;  /* 7px — kicker chip padding-inline */
 }
 
 /* Breakpoint convention (vars can't feed media queries — this comment IS the token):

@@ -1,0 +1,60 @@
+---
+import Section from '../layout/Section.astro';
+import Prose from '../primitives/Prose.astro';
+import Card from '../primitives/Card.astro';
+import AnnotatedList from '../patterns/AnnotatedList.astro';
+
+// Feedback-loop explanation that makes "cyclical, not linear" obvious
+const analysisItems = [
+  { marker: '←', lead: 'Analysis → Goals', note: '— Did we achieve what we set out to? Revise objectives.' },
+  { marker: '←', lead: 'Analysis → Research', note: '— What did we learn that changes what we need to know?' },
+  { marker: '←', lead: 'Analysis → Roadmap', note: '— Does the evidence change the sequence of work?' },
+];
+
+const executionItems = [
+  { marker: '←', lead: 'Execution → Research', note: '— Blocked? Surface what you need to learn next.' },
+  { marker: '←', lead: 'Execution → Roadmap', note: "— Scope wrong? Propose a structural change, don't ad-lib." },
+  { marker: '←', lead: 'Execution → Time', note: '— Estimate mismatch? Feed back actuals to recalibrate.' },
+];
+---
+
+<Section title="Cyclical, not linear" id="feedback">
+  <Prose slot="intro" measure={false}>
+    GRREAT is not a funnel. Each bucket feeds back into others, creating a closed-loop operating system that
+    learns and adapts with every cycle.
+  </Prose>
+
+  <div class="feedback-grid">
+    <Card>
+      <h3>Analysis-driven updates</h3>
+      <AnnotatedList items={analysisItems} />
+    </Card>
+
+    <Card>
+      <h3>Execution-driven corrections</h3>
+      <AnnotatedList items={executionItems} />
+    </Card>
+  </div>
+</Section>
+
+<style>
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-legacy-28);
+    padding-block-start: var(--space-2);
+  }
+  .feedback-grid h3 {
+    margin-block: 0 var(--space-4);
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: var(--text-5);
+    letter-spacing: var(--tracking-legacy-feedback-h3);
+  }
+  @media (min-width: 48rem) {
+    .feedback-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

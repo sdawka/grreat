@@ -1,0 +1,32 @@
+---
+// max-width + margin-auto + gutter recipe, unified — replaces the copy-pasted
+// version in .hero, `section`, and .colophon (those land on this primitive as
+// each component converts in a later step).
+export interface Props {
+  size?: 'content' | 'measure' | 'full';
+  as?: string;
+  class?: string;
+}
+
+const { size = 'content', as: Tag = 'div', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['container', className]} data-size={size} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .container {
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .container[data-size='content'] {
+    max-inline-size: var(--content-max);
+  }
+  .container[data-size='measure'] {
+    max-inline-size: var(--measure);
+  }
+  .container[data-size='full'] {
+    max-inline-size: none;
+  }
+</style>

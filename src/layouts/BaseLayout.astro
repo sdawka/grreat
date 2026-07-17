@@ -5,12 +5,14 @@ export interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  theme?: 'light' | 'dark';
 }
 
 const {
   title = 'GRREAT — Project operating system for humans and AI agents',
   description = 'Goals, Research, Roadmaps, Execution, Analysis & Time. An operating system for humans and AI agents.',
   ogImage = '/og-image.jpg',
+  theme,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -18,7 +20,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -65,3 +67,32 @@ const ogImageURL = new URL(ogImage, Astro.site);
     </div>
   </body>
 </html>
+
+<style>
+  /* Skip link — hidden until keyboard focus */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: var(--space-6);
+    z-index: 100;
+    padding: var(--space-legacy-10) var(--space-4);
+    background: var(--surface-inverse);
+    color: var(--text-on-inverse);
+    font-family: var(--mono);
+    font-size: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-1);
+    text-decoration: none;
+  }
+
+  .skip-link:focus {
+    top: var(--space-2);
+  }
+
+  /* Layout shell — single-column for signup, no sidebar */
+  .shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

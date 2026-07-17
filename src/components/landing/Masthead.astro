@@ -1,0 +1,154 @@
+---
+import Container from '../layout/Container.astro';
+import Prose from '../primitives/Prose.astro';
+
+// Editorial masthead/hero with category line, headline, and email signup CTA
+export interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<Container as="section" size="content" aria-label="Introduction" class:list={['hero', className]} {...rest}>
+  <span class="edition">The working edition</span>
+  <h1 class="wordmark">
+    GRREAT<span class="reg">™</span>
+  </h1>
+  <p class="tagline">
+    Goals · Research · Roadmaps · Execution · Analysis &amp; Time.<br />
+    A cyclical feedback operating system for humans and AI agents.
+  </p>
+  <Prose class="lede" measure={false}>
+    Run projects with your AI agent without losing the thread: one next action, one owner, a system that learns from every cycle.
+  </Prose>
+
+  <div class="hero-action">
+    <div class="kicker">
+      <span class="kicker-chip">Early access</span>
+      <span>Join the waitlist</span>
+    </div>
+    <Prose class="lede-compact" size="body-s" measure={false}>
+      Get launch notes, early product access, and practical examples of humans and AI agents running projects together.
+    </Prose>
+    <slot name="form" />
+  </div>
+</Container>
+
+<style>
+  /* Container's own scoped base rule compiles to `.container[data-astro-cid-*]`
+     (specificity 0,2,0) — a bare `:global(.hero)` (0,1,0) loses to it outright.
+     Pairing both classes present on the rendered element ties specificity;
+     source order (this file compiles after its Container import) decides. */
+  :global(.container.hero) {
+    padding-inline: var(--gutter-legacy-min);
+    padding-block-start: var(--space-8);
+  }
+  @media (min-width: 48rem) {
+    :global(.container.hero) {
+      padding-inline: var(--gutter-legacy-max);
+      padding-block-start: var(--space-legacy-60);
+    }
+  }
+
+  .edition {
+    display: block;
+    font-family: var(--mono);
+    font-size: var(--text-legacy-number-sm); /* 11px — legacy mobile micro-type floor */
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-legacy-edition);
+    color: var(--text-muted);
+    margin-block-end: var(--space-2);
+  }
+  @media (min-width: 48rem) {
+    .edition {
+      font-size: var(--text-1); /* legacy desktop value is already 10px, exact */
+    }
+  }
+
+  .wordmark {
+    /* Legacy used the `font:` shorthand, which implicitly resets font-weight
+       to normal — the actual bug behind the unresolved "glyph outline" diff
+       reported earlier. Longhand properties don't reset it, so the <h1>'s
+       UA-default bold survives unless stated explicitly (same footgun
+       Section's `.number`/`.title` already guard against). */
+    font-weight: 400;
+    font-family: var(--serif);
+    font-size: var(--text-legacy-wordmark);
+    line-height: var(--leading-legacy-wordmark);
+    letter-spacing: var(--tracking-legacy-wordmark);
+  }
+
+  .wordmark .reg {
+    /* Inherits 400 from .wordmark above now, but legacy's own `font:`
+       shorthand reset this independently too — stated explicitly to match. */
+    font-weight: 400;
+    font-family: var(--mono);
+    font-size: var(--text-1); /* legacy 8px at every width; floored, accepted deviation */
+    vertical-align: top;
+    margin-inline-start: var(--space-legacy-5);
+    letter-spacing: 0;
+  }
+
+  .tagline {
+    font-family: var(--sans);
+    font-size: var(--text-tagline);
+    line-height: var(--leading-snug);
+    color: var(--text-muted);
+    margin-block-start: var(--space-5);
+    max-inline-size: var(--measure-legacy-tagline);
+  }
+
+  /* Prose's own rendered root — external to this template, needs :global(),
+     and the same specificity-tie as .hero above (Prose's base rule is also
+     `.prose[data-astro-cid-*]`); font-size additionally fights Prose's own
+     `[data-size='body']` modifier rule (0,3,0), so `[data-size]` (attribute
+     presence) is added here to tie that too.
+     margin-block-end:1em reproduces an original authoring accident: legacy's
+     inline style only ever set `margin-top` on this paragraph, so its bottom
+     margin was always the UA default `<p>` margin (1em of ITS OWN font-size,
+     15px here) — never an intentional design value, but pixel parity means
+     reproducing it anyway now that Prose's own `margin:0` erases it. */
+  :global(.prose.lede) {
+    margin-block-start: var(--space-legacy-14);
+    margin-block-end: 1em;
+    max-inline-size: var(--measure-legacy-hero-lede);
+  }
+  :global(.prose.lede[data-size]) {
+    font-size: var(--text-legacy-hero-lede);
+  }
+
+  .hero-action {
+    margin-block-start: var(--space-legacy-42);
+    border-block-start: var(--border-1) solid var(--border-strong);
+    padding-block-start: var(--space-7);
+  }
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-legacy-10);
+    margin-block-end: var(--gutter-legacy-min);
+    font-family: var(--mono);
+    font-size: var(--text-legacy-number-sm); /* 11px — legacy mobile micro-type floor */
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-legacy-caps-3);
+  }
+  @media (min-width: 48rem) {
+    .kicker {
+      font-size: var(--text-1); /* legacy desktop value is 9px; floored, accepted deviation */
+    }
+  }
+
+  .kicker-chip {
+    background: var(--surface-inverse);
+    color: var(--text-on-inverse);
+    padding: var(--space-legacy-5) var(--space-legacy-7);
+  }
+
+  :global(.prose.lede-compact) {
+    margin-block-end: var(--space-legacy-14);
+    line-height: var(--leading-normal);
+    max-inline-size: var(--size-legacy-signup-max);
+  }
+</style>

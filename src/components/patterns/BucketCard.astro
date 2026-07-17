@@ -1,0 +1,63 @@
+---
+export interface Props {
+  bucket: 'goals' | 'research' | 'roadmap' | 'execution' | 'analysis' | 'time';
+  letter: string;
+  name: string;
+  desc: string;
+  class?: string;
+}
+
+const { bucket, letter, name, desc, class: className, ...rest } = Astro.props;
+---
+
+<li class:list={['bucket-card', className]} data-bucket={bucket} {...rest}>
+  <span class="letter">{letter}</span>
+  <span class="name">{name}</span>
+  <p class="desc">{desc}</p>
+</li>
+
+<style>
+  .bucket-card {
+    background: var(--surface-raised);
+    padding: var(--space-5) var(--gutter-legacy-min);
+    transition: background var(--duration-fast);
+  }
+  .bucket-card:active {
+    background: var(--surface-page);
+  }
+
+  /* data-bucket → --bucket remap, verbatim from legacy */
+  .bucket-card[data-bucket='goals'] { --bucket: var(--bucket-goals); }
+  .bucket-card[data-bucket='research'] { --bucket: var(--bucket-research); }
+  .bucket-card[data-bucket='roadmap'] { --bucket: var(--bucket-roadmap); }
+  .bucket-card[data-bucket='execution'] { --bucket: var(--bucket-execution); }
+  .bucket-card[data-bucket='analysis'] { --bucket: var(--bucket-analysis); }
+  .bucket-card[data-bucket='time'] { --bucket: var(--bucket-time); }
+
+  .letter {
+    display: block;
+    font-family: var(--serif);
+    font-size: var(--text-numeral);
+    line-height: var(--leading-legacy-bucket-letter);
+    letter-spacing: var(--tracking-legacy-bucket-letter);
+    color: var(--bucket);
+    margin-block-end: var(--space-legacy-6);
+  }
+
+  .name {
+    display: block;
+    font-weight: 600;
+    font-size: var(--text-2);
+    line-height: var(--leading-legacy-bucket-name);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-legacy-bucket-name);
+    margin-block-end: var(--space-2);
+  }
+
+  .desc {
+    margin: 0;
+    font-size: var(--text-2);
+    line-height: var(--leading-legacy-bucket-desc);
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import Section from '../layout/Section.astro';
+import Prose from '../primitives/Prose.astro';
+
+// Second signup CTA and compact privacy copy
+---
+
+<Section
+  title="Join the working edition"
+  id="cta"
+  style="--section-pad-bottom: var(--space-10); --section-intro-measure: var(--measure-legacy-narrow); --section-intro-margin: var(--space-3)"
+>
+  <Prose slot="intro" measure={false}>
+    Get public-edition launch notes, early product access, and system updates as GRREAT moves from a working method into a tool you can run with your AI agent.
+  </Prose>
+
+  <Prose class="closing" measure={false}>
+    You're reading the working edition — join to get the public edition when it ships.
+  </Prose>
+
+  <slot name="form" />
+</Section>
+
+<style>
+  .closing {
+    max-inline-size: var(--measure-legacy-narrow);
+    margin-block-end: var(--space-legacy-28);
+  }
+</style>
+
