@@ -27,6 +27,18 @@ const ogImageURL = new URL(ogImage, Astro.site);
     <meta name="theme-color" content="#f0ede4" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Theme: set data-theme before paint (no flash). Saved choice wins,
+         else the OS preference. Toggle (ThemeToggle) persists to localStorage. -->
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('theme');
+          const theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch (_) {}
+      })();
+    </script>
+
     <!-- SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />

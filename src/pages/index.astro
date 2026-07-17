@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Topbar from '../components/patterns/Topbar.astro';
+import ThemeToggle from '../components/primitives/ThemeToggle.astro';
 import Masthead from '../components/landing/Masthead.astro';
 import BucketExplainer from '../components/landing/BucketExplainer.astro';
 import FeedbackLoop from '../components/landing/FeedbackLoop.astro';
@@ -15,7 +16,9 @@ import Footer from '../components/patterns/Footer.astro';
   title="GRREAT — Project operating system for humans and AI agents"
   description="Goals, Research, Roadmaps, Execution, Analysis & Time. A cyclical feedback operating system for humans and AI agents. Join the waitlist for early access."
 >
-  <Topbar />
+  <Topbar>
+    <ThemeToggle slot="nav" />
+  </Topbar>
 
   <main id="main">
     <Masthead>
