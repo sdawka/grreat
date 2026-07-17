@@ -8,6 +8,14 @@
   --text-link-hover: #7c93ff;
   --border-strong: #eae7dc;  --border-hair: #3a382f;
   --focus-ring: var(--yellow);
+  /* Feedback — the light-mode -text primitives were darkened for AA on paper,
+     so they fail (dark-on-dark) here. Lightened per hue to ≥4.5:1 on --surface-page.
+     --surface-accent/--focus-ring stay yellow: brand accent survives inversion.
+     Bucket colors also stay (they render only as 40px display letters ≥ AA-large). */
+  --feedback-error:   #f26a5c;
+  --feedback-success: #56c08a;
+  --feedback-warning: #e8925a;
+  --feedback-info:    #7c93ff;
   /* --surface-accent stays yellow: brand accent survives inversion; --focus-ring
      matches for the same reason (it shares --surface-accent's value in light mode) */
 }

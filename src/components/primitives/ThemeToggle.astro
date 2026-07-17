@@ -1,0 +1,63 @@
+---
+// Color-theme toggle — flips <html data-theme> and persists to localStorage.
+// Progressive enhancement: without JS the button is inert (dark mode is an
+// enhancement); the initial theme is set by BaseLayout's inline <head> script.
+// The label is driven by CSS (::after content per [data-theme]) so it never
+// flashes the wrong text on load — the click handler only flips state.
+export interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={['theme-toggle', className]}
+  aria-label="Toggle color theme"
+  {...rest}
+>
+  <span class="theme-toggle-label" aria-hidden="true"></span>
+</button>
+
+<style>
+  .theme-toggle {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: var(--text-1);
+    letter-spacing: var(--tracking-caps-1);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .theme-toggle-label::after {
+    content: '◐ Dark'; /* offer the dark edition */
+  }
+
+  :global(:root[data-theme='dark']) .theme-toggle-label::after {
+    content: '◑ Light'; /* offer the light edition */
+  }
+
+  @media (hover: hover) {
+    .theme-toggle:hover {
+      color: var(--text-strong);
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.theme-toggle');
+  toggle?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch (_) {}
+    toggle.setAttribute('aria-pressed', String(next === 'dark'));
+  });
+</script>
