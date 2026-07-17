@@ -2,6 +2,7 @@
 import Section from './layout/Section.astro';
 import Prose from './primitives/Prose.astro';
 import Stack from './layout/Stack.astro';
+import HighlightCard from './patterns/HighlightCard.astro';
 
 // "How a working session feels" — NOW card, owner split (you vs Hermes), and feedback update
 ---
@@ -13,44 +14,30 @@ import Stack from './layout/Stack.astro';
   </Prose>
 
   <Stack gap={5}>
-    <div class="now-card" role="figure" aria-label="Session view example">
-      <div class="now-index">
-        NOW<br />
-        <span>01</span>
-      </div>
-      <div class="now-copy">
-        <div class="label">Primary next action</div>
-        <div class="now-action-text">
-          Draft Q3 OKRs for the product team
-        </div>
-      </div>
-      <div class="ownership">
-        <span class="label">Owned by</span>
-        <strong>You</strong>
-      </div>
-    </div>
+    <HighlightCard index="01" label="Primary next action" owner="You" aria-label="Session view example">
+      Draft Q3 OKRs for the product team
+    </HighlightCard>
 
-    <div class="now-card" role="figure" aria-label="AI agent session view">
-      <div class="now-index">
-        NOW<br />
-        <span>02</span>
-      </div>
-      <div class="now-copy">
-        <div class="label">Primary next action</div>
-        <div class="now-action-text">
-          Run test suite &amp; report failures
-        </div>
-      </div>
-      <div class="ownership">
-        <span class="label">Owned by</span>
-        <strong>Hermes (AI agent)</strong>
-      </div>
-    </div>
+    <HighlightCard index="02" label="Primary next action" owner="Hermes (AI agent)" aria-label="AI agent session view">
+      Run test suite &amp; report failures
+    </HighlightCard>
   </Stack>
 
-  <p style="font: 12px / 1.5 var(--mono); color: var(--muted); margin-top: 20px;">
+  <p class="caption">
     ↔ When a card is done, the owner signals completion. Analysis runs, feedback loops fire,
     and the next primary action surfaces. No orphaned projects.
   </p>
 </Section>
 
+<style>
+  .caption {
+    /* legacy's inline style only set margin-top: 20px, leaving the UA <p> default
+       margin-bottom (1em @ this element's 12px font-size = 12px) in place. */
+    margin-block: var(--space-5) var(--space-3);
+    margin-inline: 0;
+    font-family: var(--mono);
+    font-size: var(--text-2);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+</style>

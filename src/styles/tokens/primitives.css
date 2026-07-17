@@ -108,6 +108,13 @@
   --space-legacy-10: 0.625rem;              /* 10px — AnnotatedList principles-row gap */
   --space-legacy-marker-min: 1.25rem;       /* 20px — AnnotatedList principles-row marker min-width */
   --tracking-legacy-feedback-h3: -0.5px;    /* .feedback-side h3 letter-spacing */
+
+  /* Legacy-parity values (Step 4b: HighlightCard) — now-card grid tracks, copy
+     padding, and action line-height that don't land on the space/leading scale. */
+  --grid-legacy-highlight-index: 5.625rem;    /* 90px — now-index column track (≥34rem container) */
+  --grid-legacy-highlight-owner: 8.125rem;    /* 130px — ownership column track (≥34rem container) */
+  --space-legacy-highlight-copy-x: 1.5625rem; /* 25px — now-copy inline padding */
+  --leading-legacy-highlight-action: 1.18;    /* .now-action-text line-height */
 }
 
 /* Breakpoint convention (vars can't feed media queries — this comment IS the token):

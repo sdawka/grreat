@@ -1,0 +1,122 @@
+---
+import Card from '../primitives/Card.astro';
+
+// Composes Card's `highlight` variant (accent-bg + hard-shadow + margin-compensation,
+// Step 4a's single source for that recipe) instead of re-declaring it. `pad={0}`
+// hands padding to the grid cells below — the legacy card pads per-column, not
+// uniformly, so Card's own token doesn't apply here.
+//
+// `.label` reuses --tracking-caps-2 (matches MicroLabel's tracking exactly) but
+// needs font-weight 400, not MicroLabel's defining 500 — wiring it in would mean
+// overriding one of its two defining properties (same call AnnotatedList's doc
+// comment makes for Task 3's row markers). Plain scoped rule instead.
+//
+// Container query, not viewport query: `.highlight-card` is the size container,
+// but a container can't query its own box, so the 3-col/stacked toggle lives on
+// the nested `.grid` (spec §4 priority 3).
+export interface Props {
+  index: string;
+  label: string;
+  owner?: string;
+  class?: string;
+}
+
+const { index, label, owner, class: className, ...rest } = Astro.props;
+---
+
+<Card as="div" variant="highlight" pad={0} role="figure" class:list={['highlight-card', className]} {...rest}>
+  <div class="grid">
+    <div class="index">
+      NOW<br />
+      <span>{index}</span>
+    </div>
+    <div class="copy">
+      <div class="label">{label}</div>
+      <div class="action"><slot /></div>
+    </div>
+    {owner && (
+      <div class="ownership">
+        <span class="label">Owned by</span>
+        <strong>{owner}</strong>
+      </div>
+    )}
+  </div>
+</Card>
+
+<style>
+  .highlight-card {
+    container-type: inline-size;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: var(--space-11) minmax(0, 1fr);
+  }
+
+  .index {
+    padding: var(--gutter-legacy-min);
+    border-inline-end: var(--border-1) solid var(--border-strong);
+    font-family: var(--mono);
+    font-size: var(--text-2);
+    letter-spacing: var(--tracking-legacy-number);
+  }
+  .index span {
+    display: block;
+    font-family: var(--serif);
+    font-size: var(--text-numeral);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-legacy-bucket-letter);
+  }
+
+  .copy {
+    padding: var(--space-5) var(--space-legacy-highlight-copy-x);
+  }
+
+  .copy .label,
+  .ownership .label {
+    font-family: var(--mono);
+    font-size: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-2);
+  }
+
+  .action {
+    margin-block-start: var(--space-2);
+    font-family: var(--serif);
+    font-size: var(--text-d1);
+    line-height: var(--leading-legacy-highlight-action);
+  }
+
+  .ownership {
+    grid-column: 1 / -1;
+    border-block-start: var(--border-1) solid var(--border-strong);
+    padding: var(--gutter-legacy-min);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ownership strong {
+    font-family: var(--mono);
+    font-size: var(--text-4);
+    text-transform: uppercase;
+  }
+
+  @container (min-width: 34rem) {
+    .grid {
+      grid-template-columns: var(--grid-legacy-highlight-index) minmax(0, 1fr) var(--grid-legacy-highlight-owner);
+    }
+    .index,
+    .copy .label,
+    .ownership .label {
+      font-size: var(--text-1);
+    }
+    .ownership {
+      grid-column: auto;
+      border-block-start: 0;
+      border-inline-start: var(--border-1) solid var(--border-strong);
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

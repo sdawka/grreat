@@ -3,18 +3,19 @@
 // together in exactly one place. `pad` injects --card-pad the way Stack injects --stack-gap.
 export interface Props {
   variant?: 'default' | 'highlight';
-  pad?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  pad?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
   as?: string;
   class?: string;
 }
 
 const { variant = 'default', pad = 6, as: Tag = 'div', class: className, ...rest } = Astro.props;
+const cardPad = pad === 0 ? '0' : `var(--space-${pad})`;
 ---
 
 <Tag
   class:list={['card', className]}
   data-variant={variant}
-  style={`--card-pad: var(--space-${pad})`}
+  style={`--card-pad: ${cardPad}`}
   {...rest}
 >
   <slot />
