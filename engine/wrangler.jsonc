@@ -6,7 +6,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["FlueRegistry", "WorkspaceStore", "FlueHelloWorkflow"]
+      "new_sqlite_classes": ["FlueRegistry", "WorkspaceStore", "FlueInterpretWorkflow"]
     }
   ],
   "durable_objects": {
