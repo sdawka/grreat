@@ -1,0 +1,237 @@
+---
+import RuledGrid from '../primitives/RuledGrid.astro';
+import BucketCard from './BucketCard.astro';
+import { buckets } from '../../content/buckets';
+import { useCases } from '../../content/useCases';
+
+// A second axis over the six buckets: pick a use case and every card reflavors.
+// Base is CSS-only (radios drive which panel shows) so it works with no JS — the
+// dots are clickable, the framework panel shows at rest. The enhancement <script>
+// layers auto-rotation on top: it advances the checked radio on a timer, pauses on
+// hover/focus, exposes a pause/play control, and stands down under reduced motion.
+//
+// The show rules are keyed to nth-of-type, so they assume this fixed list length —
+// adding a use case means adding a matching nth-of-type pair in <style>.
+---
+
+<fieldset class="uc" data-uc>
+  <legend class="uc-legend">Use case</legend>
+
+  {useCases.map((u, i) => (
+    <Fragment>
+      <input
+        class="uc-radio"
+        type="radio"
+        name="usecase"
+        id={`usecase-${u.id}`}
+        checked={i === 0}
+      />
+      <label class="uc-tab" for={`usecase-${u.id}`}>{u.label}</label>
+    </Fragment>
+  ))}
+
+  <button type="button" class="uc-playpause" hidden aria-pressed="true">Pause</button>
+
+  <div class="uc-stage" aria-live="off">
+    {useCases.map((u) => (
+      <div class="uc-panel">
+        <RuledGrid min="var(--grid-min-legacy-bucket)">
+          {buckets.map((b) => (
+            <BucketCard bucket={b.bucket} letter={b.letter} name={b.name} desc={u.flavors[b.bucket]} />
+          ))}
+        </RuledGrid>
+      </div>
+    ))}
+  </div>
+</fieldset>
+
+<style>
+  .uc {
+    /* fieldset reset, then a wrapping row so the tabs sit inline and the stage
+       wraps to its own full-width line below them */
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .uc-legend {
+    /* visually hidden: the Section <h2> names the region; the legend only gives
+       the radio group its own accessible name */
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .uc-radio {
+    /* hidden but still focusable, so the group keeps native arrow-key navigation */
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .uc-tab {
+    font-family: var(--mono);
+    font-size: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-1);
+    padding: var(--space-2) var(--space-4);
+    border: var(--border-1) solid var(--border-strong);
+    color: var(--text-strong);
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--duration-fast), color var(--duration-fast);
+  }
+
+  @media (hover: hover) {
+    .uc-tab:hover {
+      background: var(--surface-accent);
+      color: var(--text-on-accent);
+    }
+  }
+
+  /* active use case — filled ink chip, matching the Principles tabs */
+  .uc-radio:checked + .uc-tab {
+    background: var(--surface-inverse);
+    color: var(--text-on-inverse);
+  }
+
+  .uc-radio:focus-visible + .uc-tab {
+    outline: var(--border-2) solid var(--focus-ring);
+    outline-offset: var(--space-1);
+  }
+
+  .uc-playpause {
+    appearance: none;
+    margin-inline-start: auto;
+    padding: var(--space-2) var(--space-3);
+    background: none;
+    border: var(--border-1) solid var(--border-hair);
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: var(--text-1);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps-1);
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .uc-playpause:hover {
+      color: var(--text-strong);
+      border-color: var(--border-strong);
+    }
+  }
+
+  .uc-stage {
+    flex-basis: 100%;
+    margin-block-start: var(--space-5);
+    /* Stack every panel in one grid cell so the stage is always as tall as the
+       tallest use case — switching panels causes no layout shift. */
+    display: grid;
+  }
+
+  .uc-panel {
+    grid-area: 1 / 1;
+    visibility: hidden;
+  }
+
+  /* Reveal only the panel matching the checked radio. Keyed to the 6-item list —
+     see the component header before changing the use-case count. */
+  .uc-radio:nth-of-type(1):checked ~ .uc-stage .uc-panel:nth-of-type(1),
+  .uc-radio:nth-of-type(2):checked ~ .uc-stage .uc-panel:nth-of-type(2),
+  .uc-radio:nth-of-type(3):checked ~ .uc-stage .uc-panel:nth-of-type(3),
+  .uc-radio:nth-of-type(4):checked ~ .uc-stage .uc-panel:nth-of-type(4),
+  .uc-radio:nth-of-type(5):checked ~ .uc-stage .uc-panel:nth-of-type(5),
+  .uc-radio:nth-of-type(6):checked ~ .uc-stage .uc-panel:nth-of-type(6) {
+    visibility: visible;
+  }
+</style>
+
+<script>
+  const INTERVAL = 4500;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-uc]')) {
+    init(root);
+  }
+
+  function init(root: HTMLElement) {
+    const radios = Array.from(root.querySelectorAll<HTMLInputElement>('.uc-radio'));
+    const btn = root.querySelector<HTMLButtonElement>('.uc-playpause');
+    if (radios.length < 2 || !btn) return;
+
+    let autoOn = !reduce.matches; // the visitor's intent (toggled by the button)
+    let paused = false; // transient hover/focus pause
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const running = () => autoOn && !paused && !reduce.matches;
+
+    function tick() {
+      const i = radios.findIndex((r) => r.checked);
+      radios[(i + 1) % radios.length].checked = true;
+    }
+
+    function sync() {
+      if (running() && !timer) {
+        timer = setInterval(tick, INTERVAL);
+      } else if (!running() && timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+      btn!.setAttribute('aria-pressed', String(autoOn));
+      btn!.textContent = autoOn ? 'Pause' : 'Play';
+    }
+
+    // JS is present → expose the control (hidden by default for the no-JS base).
+    // Under reduced motion we never auto-rotate, so the control stays hidden and
+    // the dots remain the way to switch.
+    if (!reduce.matches) btn.hidden = false;
+
+    btn.addEventListener('click', () => {
+      autoOn = !autoOn;
+      sync();
+    });
+
+    root.addEventListener('pointerenter', () => {
+      paused = true;
+      sync();
+    });
+    root.addEventListener('pointerleave', () => {
+      paused = false;
+      sync();
+    });
+    root.addEventListener('focusin', () => {
+      paused = true;
+      sync();
+    });
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) {
+        paused = false;
+        sync();
+      }
+    });
+
+    // A manual pick means the visitor took the wheel — stop auto-rotation for good.
+    radios.forEach((r) =>
+      r.addEventListener('change', () => {
+        autoOn = false;
+        sync();
+      }),
+    );
+
+    reduce.addEventListener('change', sync);
+
+    sync();
+  }
+</script>

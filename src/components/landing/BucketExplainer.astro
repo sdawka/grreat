@@ -1,14 +1,17 @@
 ---
 import Section from '../layout/Section.astro';
-import RuledGrid from '../primitives/RuledGrid.astro';
-import BucketCard from '../patterns/BucketCard.astro';
-import { buckets } from '../../content/buckets';
+import Prose from '../primitives/Prose.astro';
+import UseCaseCarousel from '../patterns/UseCaseCarousel.astro';
 
-// Visual six-bucket explainer using G / R¹ / R² / E / A / T
+// The six buckets are the fixed axis; the use-case carousel is the second axis
+// that reflavors every card — same G / R¹ / R² / E / A / T, any goal.
 ---
 
-<Section title="Six persistent buckets" id="buckets">
-  <RuledGrid min="var(--grid-min-legacy-bucket)">
-    {buckets.map((b) => <BucketCard {...b} />)}
-  </RuledGrid>
+<Section title="Six buckets, any goal" id="buckets">
+  <Prose slot="intro" measure={false}>
+    The six buckets never change — only their flavor does. Pick a goal and watch the
+    same G · R¹ · R² · E · A · T retune to it.
+  </Prose>
+
+  <UseCaseCarousel />
 </Section>
