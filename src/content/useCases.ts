@@ -75,15 +75,15 @@ export const useCases: UseCase[] = [
     },
   },
   {
-    id: 'internship',
-    label: 'Land the internship',
+    id: 'retire',
+    label: 'Retire early',
     flavors: {
-      goals: 'An offer at a company you respect.',
-      research: 'Study the roles, companies, and loops.',
-      roadmap: 'Applications, then prep, then interviews.',
-      execution: 'Send three applications today.',
-      analysis: 'Debrief each interview; sharpen answers.',
-      time: 'Prep time vs. application deadlines.',
+      goals: 'Enough invested to stop needing a paycheck.',
+      research: 'Learn investing, taxes, and safe withdrawal.',
+      roadmap: 'Cut costs, grow income, then coast.',
+      execution: "Invest this month's surplus.",
+      analysis: 'Check the portfolio; rebalance.',
+      time: 'Years to freedom vs. your savings rate.',
     },
   },
 ];
