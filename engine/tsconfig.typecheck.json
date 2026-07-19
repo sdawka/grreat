@@ -1,0 +1,7 @@
+// tsc scope: our code only. The base include covers .flue-vite so vite:oxc
+// can resolve a tsconfig for Flue's generated entry, but that file is not
+// type-clean and is not ours to check.
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["dist", "node_modules", ".flue-vite"]
+}
