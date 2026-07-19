@@ -108,6 +108,45 @@ describe('applyIntent (the orchestrator)', () => {
   });
 });
 
+describe('resolveIntentForArchive', () => {
+  it('replaces $ref:N with minted ids, deep inside the intent', async () => {
+    const { resolveIntentForArchive } = await import('../../src/orchestrator/orchestrator.ts');
+    const intent = {
+      classification: 'instruction' as const,
+      buckets: [],
+      directMutations: [
+        { op: 'create' as const, kind: 'goal', data: { title: 'g' } },
+        { op: 'create' as const, kind: 'next-action', data: { goalId: '$ref:0' } },
+      ],
+      edgeTriggers: [],
+      intraTriggers: [],
+    };
+    const resolved = resolveIntentForArchive(intent, [
+      { applied: true, op: 'create', id: 'goal-123', kind: 'goal' },
+      { applied: true, op: 'create', id: 'action-456', kind: 'next-action' },
+    ]);
+    const second = resolved.directMutations?.[1] as unknown as { data: { goalId: string } };
+    expect(second.data.goalId).toBe('goal-123');
+    // no lingering $ref anywhere
+    expect(JSON.stringify(resolved)).not.toContain('$ref');
+  });
+
+  it('marks unresolvable refs instead of throwing', async () => {
+    const { resolveIntentForArchive } = await import('../../src/orchestrator/orchestrator.ts');
+    const resolved = resolveIntentForArchive(
+      {
+        classification: 'instruction',
+        buckets: [],
+        directMutations: [{ op: 'create', kind: 'next-action', data: { goalId: '$ref:7' } }],
+        edgeTriggers: [],
+        intraTriggers: [],
+      },
+      [],
+    );
+    expect(JSON.stringify(resolved)).toContain('unresolved-ref-7');
+  });
+});
+
 describe('fakeInterpret (stub-mode interpreter)', () => {
   it('turns "add a goal:" into a direct goal creation + plan-next trigger', () => {
     const intent = fakeInterpret('Add a goal: run a marathon in 2027');

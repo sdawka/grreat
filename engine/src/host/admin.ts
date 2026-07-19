@@ -224,6 +224,13 @@ ${instructionLink}
   }
 });
 
+/** Raw provenance chain as JSON — payloads, results, error messages. */
+admin.get('/provenance/:instructionId', async (c) => {
+  const store = getStore(c.env);
+  const log = await store.provenance(c.req.param('instructionId'));
+  return c.json({ log });
+});
+
 admin.get('/relations', async (c) => {
   const store = getStore(c.env);
   const relations = await store.listRelations();

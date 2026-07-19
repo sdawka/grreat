@@ -40,8 +40,8 @@
     ]
   },
   "vars": {
-    "MODEL_INTERPRETER": "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
-    "MODEL_EDGE": "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
-    "STUB_MODE": "1"
+    "MODEL_INTERPRETER": "cloudflare/@cf/moonshotai/kimi-k2.6",
+    "MODEL_EDGE": "cloudflare/@cf/moonshotai/kimi-k2.6",
+    "STUB_MODE": "0"
   }
 }

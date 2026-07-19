@@ -6,7 +6,7 @@ import { buildDomainTools } from '../tools/domain-tools.ts';
 import { fakeInterpret } from '../orchestrator/fake-intent.ts';
 import { IntentSchema, type Intent } from '../orchestrator/intent.ts';
 import { interpreterInstructions } from '../orchestrator/instructions.ts';
-import { applyIntent } from '../orchestrator/orchestrator.ts';
+import { applyIntent, resolveIntentForArchive } from '../orchestrator/orchestrator.ts';
 import { invokeCatalogWorkflow } from './lib/refs.ts';
 import { requireToken } from '../host/auth.ts';
 import type { EngineEnv } from '../host/env.ts';
@@ -94,22 +94,42 @@ export default defineWorkflow({
       );
 
       const status = outcome.dispatched.length > 0 ? 'dispatched' : 'completed';
-      await store.apply(
+      // Archive the intent with $ref:N placeholders replaced by minted ids —
+      // a raw $ref inside the archived JSON would trip the store's live
+      // batch-reference resolution and strand the instruction.
+      const archivedIntent = resolveIntentForArchive(intent, outcome.applyResults);
+      const finalPatch = {
+        status,
+        ...(intent.answer ? { answer: intent.answer } : {}),
+        runIds: outcome.dispatched.map((d) => d.runId),
+      };
+      const [archived] = await store.apply(
         [
           {
             op: 'update',
             kind: 'instruction',
             id: input.instructionId,
-            patch: {
-              status,
-              intent: intent as unknown as Record<string, unknown>,
-              ...(intent.answer ? { answer: intent.answer } : {}),
-              runIds: outcome.dispatched.map((d) => d.runId),
-            },
+            patch: { ...finalPatch, intent: archivedIntent as unknown as Record<string, unknown> },
           },
         ],
         provenance,
       );
+      if (!archived?.applied) {
+        // Never strand an instruction in `interpreting`: retry without the
+        // intent payload, which is the only free-form part of the patch.
+        log.warn?.('final instruction update failed; retrying without intent', {
+          error: archived?.error?.message,
+        });
+        const [minimal] = await store.apply(
+          [{ op: 'update', kind: 'instruction', id: input.instructionId, patch: finalPatch }],
+          provenance,
+        );
+        if (!minimal?.applied) {
+          throw new Error(
+            `failed to finalize instruction: ${minimal?.error?.message ?? 'unknown store error'}`,
+          );
+        }
+      }
 
       return { intent, dispatched: outcome.dispatched, skipped: outcome.skipped };
     } catch (error) {

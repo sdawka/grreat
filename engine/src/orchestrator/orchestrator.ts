@@ -19,6 +19,30 @@ export interface ApplyIntentContext {
   runId?: string;
 }
 
+/**
+ * Prepare an intent for archiving onto the Instruction record: replace
+ * "$ref:N" placeholders with the entity ids the store actually minted for
+ * that batch position. Archived intents then carry real, linkable ids — and
+ * never trip the store's live $ref resolution when the archive is written.
+ */
+export function resolveIntentForArchive(intent: Intent, applyResults: MutationResult[]): Intent {
+  const resolve = (value: unknown): unknown => {
+    if (typeof value === 'string') {
+      const match = value.match(/^\$ref:(\d+)$/);
+      if (match) return applyResults[Number(match[1])]?.id ?? `unresolved-ref-${match[1]}`;
+      return value;
+    }
+    if (Array.isArray(value)) return value.map(resolve);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>).map(([k, v]) => [k, resolve(v)]),
+      );
+    }
+    return value;
+  };
+  return resolve(intent) as Intent;
+}
+
 export interface ApplyIntentResult {
   dispatched: DispatchedRun[];
   skipped: string[];
