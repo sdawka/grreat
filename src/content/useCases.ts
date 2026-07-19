@@ -30,7 +30,7 @@ export const useCases: UseCase[] = [
     id: 'business',
     label: 'Start a business',
     flavors: {
-      goals: 'A product people actually pay for.',
+      goals: "Something that's yours — and it finally pays.",
       research: 'Interview customers; size the market.',
       roadmap: 'MVP first, then customers, then scale.',
       execution: 'Ship the landing page this week.',
@@ -42,7 +42,7 @@ export const useCases: UseCase[] = [
     id: 'book',
     label: 'Write a book',
     flavors: {
-      goals: "A finished manuscript you're proud of.",
+      goals: 'The book in you, finally out in the world.',
       research: 'Read the field; outline the argument.',
       roadmap: 'Outline, draft, revise, publish.',
       execution: 'Write the next chapter.',
@@ -54,7 +54,7 @@ export const useCases: UseCase[] = [
     id: 'fitness',
     label: 'Get in shape',
     flavors: {
-      goals: 'A stronger body you can sustain.',
+      goals: 'Feeling strong and at home in your body.',
       research: 'Learn what training and nutrition work.',
       roadmap: 'Base, then build, then peak.',
       execution: "Do today's workout.",
@@ -66,7 +66,7 @@ export const useCases: UseCase[] = [
     id: 'semester',
     label: 'Ace the semester',
     flavors: {
-      goals: "The grades and understanding you're after.",
+      goals: 'Walking into the exam actually ready.',
       research: 'Map the syllabus; find the best sources.',
       roadmap: 'Plan the term around deadlines and exams.',
       execution: 'Finish this problem set.',
@@ -78,7 +78,7 @@ export const useCases: UseCase[] = [
     id: 'retire',
     label: 'Retire early',
     flavors: {
-      goals: 'Enough invested to stop needing a paycheck.',
+      goals: 'Waking up knowing your time is yours.',
       research: 'Learn investing, taxes, and safe withdrawal.',
       roadmap: 'Cut costs, grow income, then coast.',
       execution: "Invest this month's surplus.",
