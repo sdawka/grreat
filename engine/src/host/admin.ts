@@ -1,3 +1,4 @@
+import { getRun, listRuns } from '@flue/runtime';
 import { Hono } from 'hono';
 import {
   checkOrphans,
@@ -6,6 +7,8 @@ import {
   type Goal,
   type NextAction,
 } from '../domain/index.ts';
+import { catalogEntry, WORKFLOW_CATALOG } from '../orchestrator/catalog.ts';
+import { interpreterInstructions } from '../orchestrator/instructions.ts';
 import { getStore, type StoredEntity } from '../store/store-client.ts';
 import { requireToken } from './auth.ts';
 import type { EngineEnv } from './env.ts';
@@ -129,6 +132,96 @@ admin.get('/entities/:kind/:id', async (c) => {
 ${provenanceSection}`,
     ),
   );
+});
+
+const EDGE_IO_DOC = `input  = { instructionId, instructionText, reason }
+output = { applied: number, failed: number, rationale: string }
+model contract (EdgeOutput) = { proposedMutations: Mutation[], rationale, decision? }`;
+
+admin.get('/workflows', (c) => {
+  const rows = WORKFLOW_CATALOG.map(
+    (entry) =>
+      `<tr><td><a href="/admin/workflows/${escapeHtml(entry.id)}">${escapeHtml(entry.id)}</a></td><td>${escapeHtml(entry.type)}</td><td>${escapeHtml(entry.type === 'edge' ? `${entry.from} → ${entry.to}` : (entry.bucket ?? ''))}</td><td>${escapeHtml(entry.trigger)}</td></tr>`,
+  ).join('');
+  return c.html(
+    layout(
+      'workflows',
+      `<p class="muted">The links between and within buckets. <a href="/admin/workflows/interpret">interpret</a> is the front door; the rest fire from its intent.</p>
+<table><tr><th>workflow</th><th>type</th><th>link</th><th>fires when</th></tr>
+<tr><td><a href="/admin/workflows/interpret">interpret</a></td><td>front door</td><td>instruction → intent</td><td>Every stored instruction.</td></tr>
+${rows}</table>`,
+    ),
+  );
+});
+
+admin.get('/workflows/:id', (c) => {
+  const id = c.req.param('id');
+  if (id === 'interpret') {
+    return c.html(
+      layout(
+        'interpret',
+        `<p>The front-door workflow: turns one stored Instruction into a validated Intent, then deterministic code applies mutations and fans out to edge workflows.</p>
+<h2>input / output</h2><pre>input  = { instructionId, text }
+output = { intent: Intent, dispatched: [{workflow, runId}], skipped: string[] }</pre>
+<h2>system instructions (given to the model)</h2>${pre(interpreterInstructions())}`,
+      ),
+    );
+  }
+  const entry = catalogEntry(id);
+  if (!entry) return c.html(layout('not found', '<p>no such workflow</p>'), 404);
+  return c.html(
+    layout(
+      entry.id,
+      `<p><strong>${escapeHtml(entry.title)}</strong> · ${escapeHtml(entry.type)}</p>
+<p>fires when: ${escapeHtml(entry.trigger)}</p>
+<h2>input / output</h2><pre>${escapeHtml(EDGE_IO_DOC)}</pre>
+<h2>task prompt (over a snapshot of: ${escapeHtml(entry.contextKinds.join(', '))})</h2>
+${pre(entry.prompt)}`,
+    ),
+  );
+});
+
+admin.get('/runs', async (c) => {
+  try {
+    const { runs } = await listRuns({ limit: 100 });
+    const rows = runs
+      .map(
+        (run) =>
+          `<tr><td><a href="/admin/runs/${escapeHtml(run.runId)}">${escapeHtml(run.runId)}</a></td><td><a href="/admin/workflows/${escapeHtml(run.workflowName)}">${escapeHtml(run.workflowName)}</a></td><td>${run.isError ? '<span class="warn">error</span>' : escapeHtml(run.status)}</td><td class="muted">${escapeHtml(run.startedAt)}</td><td class="muted">${run.durationMs ?? ''}ms</td></tr>`,
+      )
+      .join('');
+    return c.html(
+      layout(
+        `runs (${runs.length})`,
+        `<table><tr><th>run</th><th>workflow</th><th>status</th><th>started</th><th>duration</th></tr>${rows || '<tr><td colspan="5" class="muted">none yet</td></tr>'}</table>`,
+      ),
+    );
+  } catch (error) {
+    return c.html(layout('runs', `<p class="warn">run store unavailable: ${escapeHtml(String(error))}</p>`));
+  }
+});
+
+admin.get('/runs/:id', async (c) => {
+  const id = c.req.param('id');
+  try {
+    const record = await getRun(id);
+    if (!record) return c.html(layout('not found', '<p>no such run</p>'), 404);
+    const input = record.input as { instructionId?: string } | undefined;
+    const instructionLink = input?.instructionId
+      ? `<p>instruction: ${entityLink('instruction', input.instructionId)}</p>`
+      : '';
+    return c.html(
+      layout(
+        `run · ${id}`,
+        `<p><a href="/admin/workflows/${escapeHtml(record.workflowName)}">${escapeHtml(record.workflowName)}</a> · ${record.isError ? '<span class="warn">error</span>' : escapeHtml(record.status)} · ${record.durationMs ?? '?'}ms</p>
+${instructionLink}
+<h2>input</h2>${pre(record.input)}
+<h2>${record.isError ? 'error' : 'result'}</h2>${pre(record.isError ? record.error : record.result)}`,
+      ),
+    );
+  } catch (error) {
+    return c.html(layout('run', `<p class="warn">run store unavailable: ${escapeHtml(String(error))}</p>`));
+  }
 });
 
 admin.get('/relations', async (c) => {
