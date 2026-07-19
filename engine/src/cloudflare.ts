@@ -1,9 +1,3 @@
-import { DurableObject } from 'cloudflare:workers';
-
-// Spike placeholder: proves an application-owned DO class can live in the
-// Flue-managed Worker. Becomes the real WorkspaceStore in the next step.
-export class WorkspaceStore extends DurableObject {
-  async fetch(_request: Request): Promise<Response> {
-    return Response.json({ ok: true, store: 'workspace' });
-  }
-}
+// Named exports become top-level Worker exports: this is how the
+// application-owned WorkspaceStore DO lives in the Flue-managed Worker.
+export { WorkspaceStore } from './store/workspace-store.ts';

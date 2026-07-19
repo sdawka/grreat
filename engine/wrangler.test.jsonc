@@ -1,0 +1,15 @@
+// Test-only worker config for @cloudflare/vitest-pool-workers.
+// The real deployable config is the Flue-generated dist/grreat_engine/wrangler.json.
+{
+  "name": "grreat-engine-test",
+  "main": "tests/workers/test-worker.ts",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["WorkspaceStore"] }],
+  "durable_objects": {
+    "bindings": [{ "name": "WORKSPACE_STORE", "class_name": "WorkspaceStore" }]
+  },
+  "vars": {
+    "STUB_MODE": "1"
+  }
+}
