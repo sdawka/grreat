@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "grreat-engine",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["FlueRegistry", "WorkspaceStore", "FlueHelloWorkflow"]
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "WORKSPACE_STORE",
+        "class_name": "WorkspaceStore"
+      }
+    ]
+  },
+  "vars": {
+    "MODEL_INTERPRETER": "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "MODEL_EDGE": "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "STUB_MODE": "1"
+  }
+}
