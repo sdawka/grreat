@@ -6,7 +6,26 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["FlueRegistry", "WorkspaceStore", "FlueInterpretWorkflow"]
+      "new_sqlite_classes": [
+        "FlueRegistry",
+        "WorkspaceStore",
+        "FlueInterpretWorkflow",
+        "FlueAnalysisToGoalsWorkflow",
+        "FlueAnalysisToResearchWorkflow",
+        "FlueAnalysisToRoadmapWorkflow",
+        "FlueExecutionToResearchWorkflow",
+        "FlueExecutionToRoadmapWorkflow",
+        "FlueExecutionToTimeWorkflow",
+        "FlueTimeToRoadmapWorkflow",
+        "FlueTimeToGoalsWorkflow",
+        "FlueTimeToResearchWorkflow",
+        "FlueResearchToGoalsWorkflow",
+        "FlueResearchToRoadmapWorkflow",
+        "FlueResearchToExecutionWorkflow",
+        "FlueGoalsRefineWorkflow",
+        "FlueResearchSynthesizeWorkflow",
+        "FlueExecutionPlanNextWorkflow"
+      ]
     }
   ],
   "durable_objects": {
