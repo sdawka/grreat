@@ -39,7 +39,16 @@ export async function requireToken(c: Context<{ Bindings: EngineEnv }>, next: Ne
     return c.body(null, 401);
   }
   if (c.req.query('token')) {
-    c.header('Set-Cookie', `${COOKIE_NAME}=${c.req.query('token')}; HttpOnly; Path=/; SameSite=Strict`);
+    // v1: the cookie carries the shared secret itself (single-tenant, no user
+    // sessions yet); Secure+HttpOnly+SameSite, and redirect so the token does
+    // not persist in the URL/history/Referer.
+    c.header(
+      'Set-Cookie',
+      `${COOKIE_NAME}=${c.req.query('token')}; HttpOnly; Secure; Path=/; SameSite=Strict`,
+    );
+    const url = new URL(c.req.url);
+    url.searchParams.delete('token');
+    return c.redirect(url.pathname + url.search, 302);
   }
   await next();
 }

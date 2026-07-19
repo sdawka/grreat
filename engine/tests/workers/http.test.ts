@@ -38,10 +38,12 @@ describe('auth', () => {
     expect(await response.text()).toContain('dashboard');
   });
 
-  it('a valid ?token= sets the browsing cookie', async () => {
+  it('a valid ?token= sets a Secure cookie and redirects the token out of the URL', async () => {
     const response = await app.request(`/admin?token=${TOKEN}`, {}, authedEnv());
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(302);
     expect(response.headers.get('Set-Cookie')).toContain('engine_admin=');
+    expect(response.headers.get('Set-Cookie')).toContain('Secure');
+    expect(response.headers.get('Location')).toBe('/admin');
   });
 });
 
