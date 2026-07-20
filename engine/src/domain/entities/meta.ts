@@ -24,7 +24,7 @@ export const DecisionRecordSchema = v.object({
   kind: v.literal('decision-record'),
   summary: v.pipe(v.string(), v.minLength(1)),
   rationale: v.pipe(v.string(), v.minLength(1)),
-  subjectRefs: v.array(RefSchema),
+  subjectRefs: v.optional(v.array(RefSchema), []),
   instructionId: v.optional(v.string()),
 });
 export type DecisionRecord = v.InferOutput<typeof DecisionRecordSchema>;

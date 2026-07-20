@@ -6,7 +6,9 @@ export const ResearchQuestionSchema = v.object({
   kind: v.literal('research-question'),
   question: v.pipe(v.string(), v.minLength(1)),
   status: v.picklist(['open', 'answered', 'dropped']),
-  goalIds: v.array(v.string()),
+  // Defaults to [] — a question can be noted before it is linked to a goal,
+  // and weaker models routinely omit optional-but-required array fields.
+  goalIds: v.optional(v.array(v.string()), []),
 });
 export type ResearchQuestion = v.InferOutput<typeof ResearchQuestionSchema>;
 

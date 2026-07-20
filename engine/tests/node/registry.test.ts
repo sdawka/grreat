@@ -50,6 +50,27 @@ describe('EntityRegistry', () => {
     ).toThrow();
   });
 
+  it('defaults omittable array fields to [] (weak models drop them)', () => {
+    const registry = createDefaultRegistry();
+    const q = registry.parse('research-question', {
+      ...base,
+      kind: 'research-question',
+      question: 'App or tutor?',
+      status: 'open',
+      // goalIds intentionally omitted
+    });
+    expect(q['goalIds']).toEqual([]);
+    const review = registry.parse('review', {
+      ...base,
+      kind: 'review',
+      subjectRef: { kind: 'goal', id: 'g1' },
+      outcomeSummary: 's',
+      verdict: 'partial',
+      // learnings omitted
+    });
+    expect(review['learnings']).toEqual([]);
+  });
+
   it('rejects unknown kinds and duplicate registration', () => {
     const registry = createDefaultRegistry();
     expect(() => registry.parse('nope', {})).toThrow(UnknownKindError);

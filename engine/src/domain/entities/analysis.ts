@@ -8,6 +8,6 @@ export const ReviewSchema = v.object({
   subjectRef: RefSchema,
   outcomeSummary: v.pipe(v.string(), v.minLength(1)),
   verdict: v.picklist(['achieved', 'partial', 'missed']),
-  learnings: v.array(v.string()),
+  learnings: v.optional(v.array(v.string()), []),
 });
 export type Review = v.InferOutput<typeof ReviewSchema>;
