@@ -6,7 +6,7 @@ import { buildDomainTools } from '../tools/domain-tools.ts';
 import { fakeInterpret } from '../orchestrator/fake-intent.ts';
 import { IntentSchema, type Intent } from '../orchestrator/intent.ts';
 import { interpreterInstructions } from '../orchestrator/instructions.ts';
-import { applyIntent, resolveIntentForArchive } from '../orchestrator/orchestrator.ts';
+import { applyIntent, finalizeInstruction, resolveIntentForArchive } from '../orchestrator/orchestrator.ts';
 import { invokeCatalogWorkflow } from './lib/refs.ts';
 import { requireToken } from '../host/auth.ts';
 import type { EngineEnv } from '../host/env.ts';
@@ -93,7 +93,11 @@ export default defineWorkflow({
         invokeCatalogWorkflow,
       );
 
-      const status = outcome.dispatched.length > 0 ? 'dispatched' : 'completed';
+      // Terminal state reflects what the store actually did: a rejected direct
+      // mutation (WIP limit, validation, …) surfaces as `failed` with the
+      // reason, never a silent `completed`.
+      const { status, error: applyError } = finalizeInstruction(outcome);
+      if (applyError) log.warn?.('direct mutations rejected by store', { error: applyError });
       // Archive the intent with $ref:N placeholders replaced by minted ids —
       // a raw $ref inside the archived JSON would trip the store's live
       // batch-reference resolution and strand the instruction.
@@ -101,6 +105,7 @@ export default defineWorkflow({
       const finalPatch = {
         status,
         ...(intent.answer ? { answer: intent.answer } : {}),
+        ...(applyError ? { error: applyError } : {}),
         runIds: outcome.dispatched.map((d) => d.runId),
       };
       const [archived] = await store.apply(

@@ -50,6 +50,32 @@ export interface ApplyIntentResult {
   decisionRecordId?: string;
 }
 
+export interface FinalizedInstruction {
+  status: 'dispatched' | 'completed' | 'failed';
+  error?: string;
+}
+
+/**
+ * Derive the instruction's terminal state from what the store ACTUALLY did.
+ * A store rejection of any direct mutation (WIP limit, validation, missing
+ * owner, …) must surface as `failed` with the reason — never a silent
+ * `completed`. The invariant layer correctly refuses the write; the caller
+ * still has to be told, or the refusal is invisible (e.g. a WIP-limited
+ * "add a goal" would otherwise report success while writing nothing).
+ */
+export function finalizeInstruction(outcome: ApplyIntentResult): FinalizedInstruction {
+  const failed = outcome.applyResults.filter((r) => !r.applied);
+  if (failed.length > 0) {
+    return {
+      status: 'failed',
+      error: `store rejected ${failed.length} mutation(s): ${failed
+        .map((r) => r.error?.message || r.error?.code || 'unknown error')
+        .join('; ')}`,
+    };
+  }
+  return { status: outcome.dispatched.length > 0 ? 'dispatched' : 'completed' };
+}
+
 /**
  * The orchestrator: deterministic code that turns an Intent into store writes
  * and workflow invocations. The model's authority ends at the Intent.

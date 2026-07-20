@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyIntent } from '../../src/orchestrator/orchestrator.ts';
+import { applyIntent, finalizeInstruction } from '../../src/orchestrator/orchestrator.ts';
 import { fakeInterpret } from '../../src/orchestrator/fake-intent.ts';
 import * as v from 'valibot';
 import { IntentSchema } from '../../src/orchestrator/intent.ts';
@@ -105,6 +105,62 @@ describe('applyIntent (the orchestrator)', () => {
     );
     expect(result.dispatched).toHaveLength(0);
     expect(result.skipped).toEqual(['time-to-goals']);
+  });
+});
+
+describe('finalizeInstruction', () => {
+  it('completes when nothing was dispatched and every mutation applied', () => {
+    const result = finalizeInstruction({
+      dispatched: [],
+      skipped: [],
+      applyResults: [{ applied: true, op: 'create', id: 'g1', kind: 'goal' }],
+    });
+    expect(result).toEqual({ status: 'completed' });
+  });
+
+  it('reports `dispatched` when triggers fired', () => {
+    const result = finalizeInstruction({
+      dispatched: [{ workflow: 'execution-plan-next', runId: 'r1' }],
+      skipped: [],
+      applyResults: [],
+    });
+    expect(result).toEqual({ status: 'dispatched' });
+  });
+
+  it('surfaces a store rejection as `failed` with the reason (no silent success)', () => {
+    const result = finalizeInstruction({
+      dispatched: [],
+      skipped: [],
+      applyResults: [
+        { applied: false, op: 'create', kind: 'goal', error: { code: 'wip-limit', message: 'WIP limit reached: park or finish a goal first' } },
+      ],
+    });
+    expect(result.status).toBe('failed');
+    expect(result.error).toContain('park or finish a goal first');
+  });
+
+  it('falls back to the error code when no message is present', () => {
+    const result = finalizeInstruction({
+      dispatched: [],
+      skipped: [],
+      applyResults: [
+        { applied: false, op: 'create', kind: 'goal', error: { code: 'wip-limit', message: '' } },
+      ],
+    });
+    expect(result.error).toContain('wip-limit');
+  });
+
+  it('fails even when other mutations applied and workflows dispatched', () => {
+    const result = finalizeInstruction({
+      dispatched: [{ workflow: 'execution-plan-next', runId: 'r1' }],
+      skipped: [],
+      applyResults: [
+        { applied: true, op: 'create', id: 'g1', kind: 'goal' },
+        { applied: false, op: 'update', kind: 'goal', error: { code: 'not-found', message: 'no such goal' } },
+      ],
+    });
+    expect(result.status).toBe('failed');
+    expect(result.error).toContain('no such goal');
   });
 });
 
