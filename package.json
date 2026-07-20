@@ -18,7 +18,9 @@
     "check": "astro check && vitest run && npm run guardrails",
     "db:migrate:local": "wrangler d1 migrations apply grreat-waitlist --local",
     "db:migrate:remote": "wrangler d1 migrations apply grreat-waitlist --remote",
-    "deploy": "astro build && wrangler deploy -c dist/server/wrangler.json"
+    "deploy": "astro build && wrangler deploy -c dist/server/wrangler.json",
+    "engine:test": "npm --prefix engine test",
+    "engine:deploy": "npm --prefix engine run deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.3",

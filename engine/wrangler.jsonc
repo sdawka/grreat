@@ -1,0 +1,47 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "grreat-engine",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "FlueRegistry",
+        "WorkspaceStore",
+        "FlueInterpretWorkflow",
+        "FlueAnalysisToGoalsWorkflow",
+        "FlueAnalysisToResearchWorkflow",
+        "FlueAnalysisToRoadmapWorkflow",
+        "FlueExecutionToResearchWorkflow",
+        "FlueExecutionToRoadmapWorkflow",
+        "FlueExecutionToTimeWorkflow",
+        "FlueTimeToRoadmapWorkflow",
+        "FlueTimeToGoalsWorkflow",
+        "FlueTimeToResearchWorkflow",
+        "FlueResearchToGoalsWorkflow",
+        "FlueResearchToRoadmapWorkflow",
+        "FlueResearchToExecutionWorkflow",
+        "FlueGoalsRefineWorkflow",
+        "FlueResearchSynthesizeWorkflow",
+        "FlueExecutionPlanNextWorkflow"
+      ]
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "WORKSPACE_STORE",
+        "class_name": "WorkspaceStore"
+      }
+    ]
+  },
+  "vars": {
+    "MODEL_INTERPRETER": "cloudflare/@cf/moonshotai/kimi-k2.6",
+    "MODEL_EDGE": "cloudflare/@cf/moonshotai/kimi-k2.6",
+    "STUB_MODE": "0"
+  }
+}
