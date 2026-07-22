@@ -33,16 +33,18 @@ export async function applyEdgeOutput(
   }
 
   if (output.proposedMutations.length === 0) {
-    return { applied: 0, failed: 0, rationale: output.rationale };
+    return { applied: 0, failed: 0, rationale: output.rationale, errors: [] };
   }
 
   const results = await store.apply(output.proposedMutations, {
     ...provenance,
     ...(decisionRecordId ? { decisionRecordId } : {}),
   });
+  const rejected = results.filter((r) => !r.applied);
   return {
-    applied: results.filter((r) => r.applied).length,
-    failed: results.filter((r) => !r.applied).length,
+    applied: results.length - rejected.length,
+    failed: rejected.length,
     rationale: output.rationale,
+    errors: rejected.map((r) => r.error?.message || r.error?.code || 'unknown error'),
   };
 }

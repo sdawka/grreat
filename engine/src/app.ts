@@ -4,6 +4,7 @@ import { flue } from '@flue/runtime/routing';
 import { Hono } from 'hono';
 import { api } from './host/api.ts';
 import { admin } from './host/admin.ts';
+import { requireToken } from './host/auth.ts';
 import type { EngineEnv } from './host/env.ts';
 
 type CloudflareAIRegistration = Extract<
@@ -25,6 +26,15 @@ const app = new Hono<{ Bindings: EngineEnv }>();
 app.get('/healthz', (c) => c.json({ ok: true }));
 app.route('/api', api);
 app.route('/admin', admin);
+
+// Defense-in-depth: gate Flue's entire HTTP surface (workflows/agents/channels/
+// runs) behind the admin token rather than relying on every workflow module
+// remembering to `export const runs = requireToken`. The interpret front-door
+// runs via invoke() internally, so this does not affect /api/instructions.
+app.use('/workflows/*', requireToken);
+app.use('/agents/*', requireToken);
+app.use('/channels/*', requireToken);
+app.use('/runs/*', requireToken);
 app.route('/', flue());
 
 export default app;

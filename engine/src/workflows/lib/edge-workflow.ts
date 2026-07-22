@@ -100,7 +100,21 @@ export function createEdgeWorkflow(id: string) {
         }
       }
 
-      return applyEdgeOutput(store, output, provenance);
+      const result = await applyEdgeOutput(store, output, provenance);
+      if (result.failed > 0) {
+        log.warn?.(`${id}: store rejected ${result.failed} proposed mutation(s)`, {
+          errors: result.errors,
+        });
+        // A fully-rejected edge accomplished nothing despite proposing changes —
+        // that is a failed run, not a green one. Errors the run record so it is
+        // visible in admin instead of masquerading as success.
+        if (result.applied === 0) {
+          throw new Error(
+            `${id}: all ${result.failed} proposed mutation(s) rejected: ${result.errors.join('; ')}`,
+          );
+        }
+      }
+      return result;
     },
   });
 
