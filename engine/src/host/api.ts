@@ -39,6 +39,10 @@ api.post('/instructions', async (c) => {
 
   const outcome = await runInterpret(c.env, instructionId, parsed.output.text);
   const instruction = (await store.get('instruction', instructionId))?.entity;
+  // 200 when interpretation reached a terminal state synchronously (completed,
+  // dispatched, or failed); 202 only when it is still in flight and the caller
+  // must poll. A terminal `failed` must not read as 202 "still working".
+  const settled = outcome.completed || instruction?.status === 'failed';
   return c.json(
     {
       instructionId,
@@ -48,7 +52,7 @@ api.post('/instructions', async (c) => {
       dispatched: outcome.dispatched,
       error: instruction?.error ?? null,
     },
-    outcome.completed ? 200 : 202,
+    settled ? 200 : 202,
   );
 });
 

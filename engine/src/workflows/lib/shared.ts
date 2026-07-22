@@ -23,5 +23,7 @@ export const EdgeResultSchema = v.object({
   applied: v.number(),
   failed: v.number(),
   rationale: v.string(),
+  /** Store-rejection reasons for the `failed` mutations, for run inspection. */
+  errors: v.optional(v.array(v.string()), []),
 });
 export type EdgeResult = v.InferOutput<typeof EdgeResultSchema>;
