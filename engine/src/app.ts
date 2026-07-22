@@ -31,6 +31,9 @@ app.route('/admin', admin);
 // runs) behind the admin token rather than relying on every workflow module
 // remembering to `export const runs = requireToken`. The interpret front-door
 // runs via invoke() internally, so this does not affect /api/instructions.
+// NOTE: these four prefixes cover every route flue() mounts at this pin
+// (@flue/runtime beta.9). Re-check on upgrade — a new top-level Flue route
+// prefix would land here unauthenticated until added below.
 app.use('/workflows/*', requireToken);
 app.use('/agents/*', requireToken);
 app.use('/channels/*', requireToken);

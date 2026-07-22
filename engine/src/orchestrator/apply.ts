@@ -12,6 +12,12 @@ export async function applyEdgeOutput(
   output: EdgeOutput,
   provenance: Provenance,
 ): Promise<EdgeResult> {
+  // Reasons for every store rejection this edge caused — proposed mutations AND
+  // a rejected decision-record — so nothing the edge tried is silently dropped.
+  const errors: string[] = [];
+  const reasonOf = (r: { error?: { code: string; message: string } }): string =>
+    r.error?.message || r.error?.code || 'unknown error';
+
   let decisionRecordId: string | undefined;
   if (output.decision) {
     const [result] = await store.apply(
@@ -30,10 +36,11 @@ export async function applyEdgeOutput(
       provenance,
     );
     if (result?.applied) decisionRecordId = result.id;
+    else errors.push(`decision-record: ${reasonOf(result ?? {})}`);
   }
 
   if (output.proposedMutations.length === 0) {
-    return { applied: 0, failed: 0, rationale: output.rationale, errors: [] };
+    return { applied: 0, failed: 0, rationale: output.rationale, errors };
   }
 
   const results = await store.apply(output.proposedMutations, {
@@ -45,6 +52,6 @@ export async function applyEdgeOutput(
     applied: results.length - rejected.length,
     failed: rejected.length,
     rationale: output.rationale,
-    errors: rejected.map((r) => r.error?.message || r.error?.code || 'unknown error'),
+    errors: [...errors, ...rejected.map(reasonOf)],
   };
 }

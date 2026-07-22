@@ -58,9 +58,14 @@ export async function runInterpret(
           patch: { status: 'failed', error: `interpret admission failed: ${String(error)}` },
         },
       ])
-      .catch(() => {
-        /* best-effort: the store write itself failed; the caller still 202s and the
-           instruction stays pollable in `received` for a re-POST */
+      .catch((writeError) => {
+        // Double fault: admission failed AND the mark-failed write failed. The
+        // instruction is left in `received`; log loudly so an operator can find
+        // it — swallowing to avoid a 500 is fine, swallowing silently is not.
+        console.error(
+          `[dispatch] double fault: could not mark instruction ${instructionId} failed after admission error`,
+          { admissionError: String(error), writeError: String(writeError) },
+        );
       });
     return { completed: false, dispatched: [] };
   }

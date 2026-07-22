@@ -88,6 +88,37 @@ describe('applyEdgeOutput', () => {
     expect(result.errors).toEqual(['WIP limit reached']);
   });
 
+  it('surfaces a rejected decision-record instead of dropping it silently', async () => {
+    // Store that rejects the decision-record create but applies the proposal.
+    const store: StorePort = {
+      async apply(mutations: Mutation[]) {
+        const first = mutations[0];
+        if (first && 'kind' in first && first.kind === 'decision-record') {
+          return [{ applied: false, op: 'create', kind: 'decision-record', error: { code: 'validation', message: 'summary too short' } }];
+        }
+        return [{ applied: true, op: 'create', id: 'q1', kind: 'research-question' }];
+      },
+      async list() { return []; },
+      async get() { return null; },
+      async listRelations() { return []; },
+      async snapshot() { return {}; },
+      async provenance() { return []; },
+      async stats() { return { counts: [], relationCount: 0, logCount: 0 }; },
+    };
+    const result = await applyEdgeOutput(
+      store,
+      {
+        proposedMutations: [{ op: 'create', kind: 'research-question', data: {} }],
+        rationale: 'x',
+        decision: { summary: 'bad', rationale: 'because' },
+      },
+      provenance,
+    );
+    expect(result.applied).toBe(1);
+    expect(result.failed).toBe(0); // failed counts proposed mutations only
+    expect(result.errors).toContain('decision-record: summary too short');
+  });
+
   it('falls back to the error code when a rejection has no message', async () => {
     const result = await applyEdgeOutput(
       storeReturning([
