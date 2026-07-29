@@ -187,4 +187,53 @@ describe('WorkspaceStore', () => {
     expect(stats.counts.find((c) => c.kind === 'goal')?.n).toBe(1);
     expect(stats.logCount).toBe(2);
   });
+
+  it('creates an aspiration, serves-links a goal, and merges via merged-into', async () => {
+    const store = freshStore();
+    const [asp] = await store.apply(
+      [
+        {
+          op: 'create',
+          kind: 'aspiration',
+          data: { title: 'Writer', dream: 'Ship words', status: 'open' },
+        },
+      ],
+      { workflowName: 'goals-consolidate' },
+    );
+    const [keep] = await store.apply([{ op: 'create', kind: 'goal', data: goalData('Get fit') }]);
+    const [dup] = await store.apply([{ op: 'create', kind: 'goal', data: goalData('Get fit') }]);
+
+    const rels = await store.apply([
+      {
+        op: 'relate',
+        relationKind: 'serves',
+        from: { kind: 'goal', id: keep!.id! },
+        to: { kind: 'aspiration', id: asp!.id! },
+      },
+      { op: 'update', kind: 'goal', id: dup!.id!, patch: { status: 'dropped' } },
+      {
+        op: 'relate',
+        relationKind: 'merged-into',
+        from: { kind: 'goal', id: dup!.id! },
+        to: { kind: 'goal', id: keep!.id! },
+      },
+    ]);
+    expect(rels.every((r) => r.applied)).toBe(true);
+  });
+
+  it('rejects a serves relation to a non-aspiration', async () => {
+    const store = freshStore();
+    const [g1] = await store.apply([{ op: 'create', kind: 'goal', data: goalData('A') }]);
+    const [g2] = await store.apply([{ op: 'create', kind: 'goal', data: goalData('B') }]);
+    const [res] = await store.apply([
+      {
+        op: 'relate',
+        relationKind: 'serves',
+        from: { kind: 'goal', id: g1!.id! },
+        to: { kind: 'goal', id: g2!.id! },
+      },
+    ]);
+    expect(res?.applied).toBe(false);
+    expect(res?.error?.code).toBe('relation-endpoint');
+  });
 });
