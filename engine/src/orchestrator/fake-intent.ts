@@ -51,6 +51,28 @@ export function fakeInterpret(text: string): Intent {
     };
   }
 
+  if (/\b(consolidate|merge|dedupe|declutter)\b/i.test(text) && /\bgoals?\b/i.test(text)) {
+    return {
+      classification: 'instruction',
+      buckets: ['goals'],
+      edgeTriggers: [],
+      intraTriggers: [
+        { workflow: 'goals-consolidate', reason: 'Asked to consolidate goals under aspirations.' },
+      ],
+    };
+  }
+
+  if (/\b(prioriti[sz]e|rank|order)\b/i.test(text) && /\bgoals?\b/i.test(text)) {
+    return {
+      classification: 'instruction',
+      buckets: ['goals'],
+      edgeTriggers: [],
+      intraTriggers: [
+        { workflow: 'goals-prioritize', reason: 'Asked to prioritize the active goals.' },
+      ],
+    };
+  }
+
   if (/\b(blocked|stuck)\b/i.test(text)) {
     return {
       classification: 'instruction',
