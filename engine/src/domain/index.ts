@@ -1,6 +1,7 @@
 export * from './base.ts';
 export * from './buckets.ts';
 export * from './entities/goals.ts';
+export * from './entities/aspiration.ts';
 export * from './entities/research.ts';
 export * from './entities/roadmap.ts';
 export * from './entities/execution.ts';

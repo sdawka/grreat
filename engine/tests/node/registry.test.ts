@@ -15,11 +15,24 @@ const base = {
 };
 
 describe('EntityRegistry', () => {
-  it('registers all 15 default kinds', () => {
+  it('registers all 16 default kinds including aspiration', () => {
     const registry = createDefaultRegistry();
-    expect(registry.kinds()).toHaveLength(15);
+    expect(registry.kinds()).toHaveLength(16);
     expect(registry.has('goal')).toBe(true);
     expect(registry.has('instruction')).toBe(true);
+    expect(registry.has('aspiration')).toBe(true);
+  });
+
+  it('parses a valid aspiration with no owner', () => {
+    const registry = createDefaultRegistry();
+    const asp = registry.parse('aspiration', {
+      ...base,
+      kind: 'aspiration',
+      title: 'Become a working writer',
+      dream: 'Write and ship things people read',
+      status: 'open',
+    });
+    expect(asp.kind).toBe('aspiration');
   });
 
   it('parses a valid goal', () => {

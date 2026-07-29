@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 import type { BaseEntity } from './base.ts';
 import { GoalSchema } from './entities/goals.ts';
+import { AspirationSchema } from './entities/aspiration.ts';
 import { FindingSchema, ResearchQuestionSchema } from './entities/research.ts';
 import { MilestoneSchema, RoadmapItemSchema, SprintSchema } from './entities/roadmap.ts';
 import { ExecutionLogSchema, NextActionSchema, WorkingSessionSchema } from './entities/execution.ts';
@@ -62,6 +63,7 @@ export class EntityRegistry {
 export function createDefaultRegistry(): EntityRegistry {
   return new EntityRegistry()
     .register('goal', GoalSchema as EntitySchema)
+    .register('aspiration', AspirationSchema as EntitySchema)
     .register('research-question', ResearchQuestionSchema as EntitySchema)
     .register('finding', FindingSchema as EntitySchema)
     .register('roadmap-item', RoadmapItemSchema as EntitySchema)
