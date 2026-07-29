@@ -21,7 +21,7 @@ export interface WorkflowCatalogEntry {
   contextKinds: string[];
 }
 
-const GOALS = ['goal'];
+const GOALS = ['goal', 'aspiration'];
 const RESEARCH = ['research-question', 'finding'];
 const ROADMAP = ['roadmap-item', 'milestone', 'sprint'];
 const EXECUTION = ['next-action', 'execution-log', 'working-session'];
@@ -171,7 +171,27 @@ export const INTRA_CATALOG: readonly WorkflowCatalogEntry[] = [
     title: 'Goals · refine',
     trigger: 'A goal is vague, unowned, or conflates several outcomes.',
     prompt:
-      'Clarify the goals: split conflated goals, set project vs program mode, sharpen the desired outcome into something checkable, and ensure every goal has an explicit owner. Respect the WIP limit of 5.',
+      'Clarify the goals: split conflated goals, set project vs program mode, sharpen the desired outcome into something checkable, and ensure every goal has an explicit owner. Respect the WIP limit of 5. Refinement runs after consolidation: sharpen the goals that serve each aspiration; do not re-cluster or create aspirations here.',
+    contextKinds: GOALS,
+  },
+  {
+    id: 'goals-consolidate',
+    type: 'intra',
+    bucket: 'goals',
+    title: 'Goals · consolidate',
+    trigger: 'A pile of raw goals needs grouping into a few aspirations.',
+    prompt:
+      'Consolidate the goals at the DUMB (dream) level, not the SMART level. Cluster related goals under a few aspirations: create aspiration entities (title + dream statement, no owner) and relate each goal to the aspiration it serves. Where goals are near-duplicates, keep the earliest, mark the redundant one status "dropped", relate it merged-into the survivor, and record a decision with the rationale. Do NOT sharpen or narrow goal outcomes here — that is refinement, which runs next.',
+    contextKinds: GOALS,
+  },
+  {
+    id: 'goals-prioritize',
+    type: 'intra',
+    bucket: 'goals',
+    title: 'Goals · prioritize',
+    trigger: 'Active goals compete for focus and need an explicit order.',
+    prompt:
+      'Prioritize the active goals into a total order. Assign each active goal a rank via update {rank} where 1 is highest; every active goal gets a distinct rank. Do not change goal status and respect the WIP limit of 5 — ranking orders within the cap, it does not activate or park. Record the ordering rationale as a decision.',
     contextKinds: GOALS,
   },
   {
