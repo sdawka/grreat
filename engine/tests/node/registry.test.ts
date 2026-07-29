@@ -15,11 +15,24 @@ const base = {
 };
 
 describe('EntityRegistry', () => {
-  it('registers all 15 default kinds', () => {
+  it('registers all 16 default kinds including aspiration', () => {
     const registry = createDefaultRegistry();
-    expect(registry.kinds()).toHaveLength(15);
+    expect(registry.kinds()).toHaveLength(16);
     expect(registry.has('goal')).toBe(true);
     expect(registry.has('instruction')).toBe(true);
+    expect(registry.has('aspiration')).toBe(true);
+  });
+
+  it('parses a valid aspiration with no owner', () => {
+    const registry = createDefaultRegistry();
+    const asp = registry.parse('aspiration', {
+      ...base,
+      kind: 'aspiration',
+      title: 'Become a working writer',
+      dream: 'Write and ship things people read',
+      status: 'open',
+    });
+    expect(asp.kind).toBe('aspiration');
   });
 
   it('parses a valid goal', () => {
@@ -34,6 +47,21 @@ describe('EntityRegistry', () => {
       owner: { type: 'human', name: 'sahil' },
     });
     expect(goal.kind).toBe('goal');
+  });
+
+  it('parses a goal with a rank', () => {
+    const registry = createDefaultRegistry();
+    const goal = registry.parse('goal', {
+      ...base,
+      kind: 'goal',
+      mode: 'project',
+      title: 'Write a book',
+      outcome: 'A finished manuscript',
+      status: 'active',
+      owner: { type: 'human', name: 'sahil' },
+      rank: 1,
+    });
+    expect((goal as { rank?: number }).rank).toBe(1);
   });
 
   it('rejects a goal without an owner', () => {

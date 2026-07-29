@@ -3,6 +3,7 @@ import {
   checkOrphans,
   checkOwnership,
   checkWipLimit,
+  checkDuplicateRanks,
   isStructuralChange,
 } from '../../src/domain/constraints.ts';
 import type { Goal } from '../../src/domain/entities/goals.ts';
@@ -105,5 +106,27 @@ describe('isStructuralChange', () => {
 
   it('ignores ordinary content changes', () => {
     expect(isStructuralChange('add a goal to run a marathon')).toBe(false);
+  });
+});
+
+describe('checkDuplicateRanks', () => {
+  it('flags two active goals sharing a rank', () => {
+    const violations = checkDuplicateRanks([
+      { ...goal('a'), rank: 1 },
+      { ...goal('b'), rank: 1 },
+      { ...goal('c'), rank: 2 },
+    ]);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]?.code).toBe('duplicate-rank');
+    expect(violations[0]?.subjects).toEqual(expect.arrayContaining(['a', 'b']));
+  });
+
+  it('ignores parked goals and unranked goals', () => {
+    const violations = checkDuplicateRanks([
+      { ...goal('a'), rank: 1 },
+      { ...goal('b', 'parked'), rank: 1 },
+      goal('c'),
+    ]);
+    expect(violations).toHaveLength(0);
   });
 });

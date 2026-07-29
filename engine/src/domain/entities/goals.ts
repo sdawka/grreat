@@ -5,6 +5,8 @@ import { baseEntityFields, OwnerSchema } from '../base.ts';
  * A goal runs as a project (driven to completion) or a program (steered for
  * consistent improvement on a metric) — both with revisable desired outcomes.
  * Parking a goal requires a decision record ("no orphaned projects").
+ * `rank` (optional, 1 = highest) orders active goals within the WIP limit;
+ * it is set by the goals-prioritize workflow, not on capture.
  */
 export const GoalSchema = v.object({
   ...baseEntityFields,
@@ -16,5 +18,6 @@ export const GoalSchema = v.object({
   status: v.picklist(['active', 'parked', 'done', 'dropped']),
   owner: OwnerSchema,
   parkedDecisionId: v.optional(v.string()),
+  rank: v.optional(v.number()),
 });
 export type Goal = v.InferOutput<typeof GoalSchema>;

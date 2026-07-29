@@ -2,6 +2,7 @@ import { getRun, listRuns } from '@flue/runtime';
 import { Hono } from 'hono';
 import {
   checkOrphans,
+  checkDuplicateRanks,
   META_KINDS,
   BUCKET_KINDS,
   type Goal,
@@ -33,6 +34,7 @@ admin.get('/', async (c) => {
     store.list('instruction', 10),
   ]);
   const orphans = checkOrphans(goals as unknown as Goal[], actions as unknown as NextAction[]);
+  const dupRanks = checkDuplicateRanks(goals as unknown as Goal[]);
   const activeGoals = goals.filter((g) => g.status === 'active').length;
 
   const countRows = stats.counts
@@ -46,6 +48,7 @@ admin.get('/', async (c) => {
       ? [`<li class="warn">WIP limit exceeded: ${activeGoals} active goals (max 5)</li>`]
       : []),
     ...orphans.map((violation) => `<li class="warn">${escapeHtml(violation.message)}</li>`),
+    ...dupRanks.map((violation) => `<li class="warn">${escapeHtml(violation.message)}</li>`),
   ];
   const instructionRows = instructions
     .map(

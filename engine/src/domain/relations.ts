@@ -78,5 +78,7 @@ export function createDefaultRelationRegistry(): RelationKindRegistry {
     .register('estimates', { from: ['estimate'], to: ['roadmap-item', 'next-action', 'goal'] })
     .register('parked-by', { from: ['goal'], to: ['decision-record'] })
     .register('reviews', { from: ['review'], to: ['goal', 'sprint', 'milestone'] })
+    .register('serves', { from: ['goal'], to: ['aspiration'] })
+    .register('merged-into', { from: ['goal'], to: ['goal'] })
     .register('derived-from', { from: '*', to: ['instruction'] });
 }

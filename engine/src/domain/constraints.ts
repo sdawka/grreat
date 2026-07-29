@@ -6,7 +6,7 @@ import type { Mutation } from './mutations.ts';
 export const WIP_LIMIT = 5;
 
 export interface ConstraintViolation {
-  code: 'wip-limit' | 'no-owner' | 'orphaned-goal';
+  code: 'wip-limit' | 'no-owner' | 'orphaned-goal' | 'duplicate-rank';
   message: string;
   /** Ids of the offending entities/mutations, where known. */
   subjects: string[];
@@ -78,6 +78,32 @@ export function checkOrphans(
         code: 'orphaned-goal',
         message: `Active goal "${goal.title}" has no primary next action.`,
         subjects: [goal.id],
+      });
+    }
+  }
+  return violations;
+}
+
+/**
+ * Prioritization must be a total order: two active goals should not share a
+ * rank. Soft check — surfaced in admin like orphaned goals, not a write-block
+ * (ranks legitimately collide mid-reprioritization).
+ */
+export function checkDuplicateRanks(goals: readonly Goal[]): ConstraintViolation[] {
+  const byRank = new Map<number, string[]>();
+  for (const goal of goals) {
+    if (goal.status !== 'active' || goal.rank === undefined) continue;
+    const ids = byRank.get(goal.rank) ?? [];
+    ids.push(goal.id);
+    byRank.set(goal.rank, ids);
+  }
+  const violations: ConstraintViolation[] = [];
+  for (const [rank, ids] of byRank) {
+    if (ids.length > 1) {
+      violations.push({
+        code: 'duplicate-rank',
+        message: `Rank ${rank} is shared by ${ids.length} active goals; prioritize to break the tie.`,
+        subjects: ids,
       });
     }
   }
