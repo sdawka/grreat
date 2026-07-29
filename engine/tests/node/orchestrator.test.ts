@@ -217,6 +217,17 @@ describe('fakeInterpret (stub-mode interpreter)', () => {
     expect(intent.decision).toBeTruthy();
   });
 
+  it('routes "consolidate my goals" to goals-consolidate', () => {
+    const intent = fakeInterpret('consolidate my goals please');
+    expect(v.safeParse(IntentSchema, intent).success).toBe(true);
+    expect(intent.intraTriggers[0]?.workflow).toBe('goals-consolidate');
+  });
+
+  it('routes "prioritize my goals" to goals-prioritize', () => {
+    const intent = fakeInterpret('prioritize my goals');
+    expect(intent.intraTriggers[0]?.workflow).toBe('goals-prioritize');
+  });
+
   it('routes blockers to execution-to-research', () => {
     const intent = fakeInterpret('I am blocked on the API design');
     expect(intent.edgeTriggers[0]?.edge).toBe('execution-to-research');
