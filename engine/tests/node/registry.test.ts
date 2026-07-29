@@ -49,6 +49,21 @@ describe('EntityRegistry', () => {
     expect(goal.kind).toBe('goal');
   });
 
+  it('parses a goal with a rank', () => {
+    const registry = createDefaultRegistry();
+    const goal = registry.parse('goal', {
+      ...base,
+      kind: 'goal',
+      mode: 'project',
+      title: 'Write a book',
+      outcome: 'A finished manuscript',
+      status: 'active',
+      owner: { type: 'human', name: 'sahil' },
+      rank: 1,
+    });
+    expect((goal as { rank?: number }).rank).toBe(1);
+  });
+
   it('rejects a goal without an owner', () => {
     const registry = createDefaultRegistry();
     expect(() =>
