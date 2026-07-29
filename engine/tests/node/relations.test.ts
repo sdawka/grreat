@@ -18,6 +18,36 @@ describe('RelationKindRegistry', () => {
     ).not.toThrow();
   });
 
+  it('accepts a valid serves relation goal -> aspiration', () => {
+    expect(() =>
+      registry.validate({
+        kind: 'serves',
+        from: { kind: 'goal', id: 'g1' },
+        to: { kind: 'aspiration', id: 'a1' },
+      }),
+    ).not.toThrow();
+  });
+
+  it('rejects serves with a non-aspiration target', () => {
+    expect(() =>
+      registry.validate({
+        kind: 'serves',
+        from: { kind: 'goal', id: 'g1' },
+        to: { kind: 'goal', id: 'g2' },
+      }),
+    ).toThrow(RelationEndpointError);
+  });
+
+  it('accepts merged-into goal -> goal', () => {
+    expect(() =>
+      registry.validate({
+        kind: 'merged-into',
+        from: { kind: 'goal', id: 'dup' },
+        to: { kind: 'goal', id: 'survivor' },
+      }),
+    ).not.toThrow();
+  });
+
   it('rejects wrong endpoint kinds', () => {
     expect(() =>
       registry.validate({
