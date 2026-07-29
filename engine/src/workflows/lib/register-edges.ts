@@ -17,6 +17,8 @@ import researchToGoals from '../research-to-goals.ts';
 import researchToRoadmap from '../research-to-roadmap.ts';
 import researchToExecution from '../research-to-execution.ts';
 import goalsRefine from '../goals-refine.ts';
+import goalsConsolidate from '../goals-consolidate.ts';
+import goalsPrioritize from '../goals-prioritize.ts';
 import researchSynthesize from '../research-synthesize.ts';
 import executionPlanNext from '../execution-plan-next.ts';
 
@@ -33,5 +35,7 @@ registerWorkflowRef('research-to-goals', researchToGoals);
 registerWorkflowRef('research-to-roadmap', researchToRoadmap);
 registerWorkflowRef('research-to-execution', researchToExecution);
 registerWorkflowRef('goals-refine', goalsRefine);
+registerWorkflowRef('goals-consolidate', goalsConsolidate);
+registerWorkflowRef('goals-prioritize', goalsPrioritize);
 registerWorkflowRef('research-synthesize', researchSynthesize);
 registerWorkflowRef('execution-plan-next', executionPlanNext);
