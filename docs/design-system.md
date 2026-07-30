@@ -444,8 +444,9 @@ Open items:
   npx wrangler dev -c dist/server/wrangler.json` then full-page screenshots at
   375/768/1280 (`astro dev` cannot render this site — workerd fails with a masked
   "process is not defined").
-- **Dark mode** is verified by contrast math and served-output inspection only —
-  no live visual pass yet.
+- **Dark mode** passed a screenshot review 2026-07-30 (375/768/1280, both themes,
+  before/after vs main; Python Playwright + cached Chromium are available locally) —
+  but there's still no automated pass in CI.
 - **Unused tokens:** `--duration-slow` has no consumer; `--surface-focus`'s
   intended consumer (input focus background) was superseded by the global
   `:focus-visible` ring decision — wire it or delete it on the next form work.
