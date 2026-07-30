@@ -104,7 +104,9 @@ const { index, label, owner, class: className, ...rest } = Astro.props;
 
   @container (min-width: 34rem) {
     .grid {
-      grid-template-columns: var(--space-11) minmax(0, 1fr) var(--space-11);
+      /* owner track is content-sized: a fixed track narrower than the
+         "OWNED BY" label wraps it and pins it to the card edge */
+      grid-template-columns: var(--space-11) minmax(0, 1fr) auto;
     }
     .index,
     .copy .label,
