@@ -57,10 +57,10 @@ const statusId = `signup-status-${crypto.randomUUID().slice(0, 8)}`;
 
      At/above 48rem the pair joins into one seamless control, same as
      legacy: the input's shared-edge border drops so the button's own
-     border reads as the seam, and the button gets pixel-parity padding/
-     height retunes (§5c's defaults render a few px shorter/wider). */
+     border reads as the seam, and the button gets padding/height retunes
+     (§5c's defaults render a few px shorter/wider). */
   :global(.signup-fields) {
-    max-width: var(--size-legacy-signup-max);
+    max-width: var(--content-form);
   }
 
   :global(.signup-fields .btn) {
@@ -68,12 +68,12 @@ const statusId = `signup-status-${crypto.randomUUID().slice(0, 8)}`;
     height: var(--space-9);
     margin-block-start: var(--space-2);
     white-space: nowrap;
-    --btn-pad-x: var(--space-legacy-btn-x);
+    --btn-pad-x: var(--space-6);
   }
 
   .privacy-note {
-    margin-block-start: var(--space-legacy-14);
-    max-width: var(--size-legacy-signup-max);
+    margin-block-start: var(--space-4);
+    max-width: var(--content-form);
     font-family: var(--mono);
     /* Below 48rem: legacy's micro-type floor (functional text ≥12px). */
     font-size: var(--text-2);

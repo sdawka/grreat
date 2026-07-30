@@ -1,7 +1,7 @@
 ---
 // Shared row anatomy for feedback rows (columns=1: arrow marker, muted small note)
 // and principles rows (columns=2: numbered marker, plain note, ruled 2-up grid) —
-// legacy-parity retuning keyed off [data-columns] since layout, marker color, and
+// per-variant retuning keyed off [data-columns] since layout, marker color, and
 // note styling all diverge between the two call sites.
 //
 // `.marker` is NOT MicroLabel: holding pixel parity here means overriding both of
@@ -75,7 +75,7 @@ const { items, columns = 1, as: Tag = 'ul', class: className, ...rest } = Astro.
   }
   .annotated-list[data-columns='1'] .note {
     color: var(--text-muted);
-    font-size: var(--text-legacy-note-sm);
+    font-size: var(--text-1);
   }
 
   /* columns=2 — principles rows: ruled 2-up grid, mobile-first single column */
@@ -87,15 +87,15 @@ const { items, columns = 1, as: Tag = 'ul', class: className, ...rest } = Astro.
   .annotated-list[data-columns='2'] .row {
     display: flex;
     align-items: baseline;
-    gap: var(--space-legacy-10);
-    padding: var(--space-4) var(--gutter-legacy-min);
+    gap: var(--space-3);
+    padding: var(--space-4);
     border-block-end: var(--border-1) solid var(--border-hair);
   }
   .annotated-list[data-columns='2'] .row:last-child {
     border-block-end: 0;
   }
   .annotated-list[data-columns='2'] .marker {
-    min-inline-size: var(--space-legacy-marker-min);
+    min-inline-size: var(--space-5);
     font-size: var(--text-1);
     color: var(--text-muted);
   }

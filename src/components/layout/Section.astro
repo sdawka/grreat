@@ -8,7 +8,7 @@ export interface Props {
   id?: string; // omit → slug derived from title
   rule?: boolean;
   class?: string;
-  style?: string; // legacy-parity retuning: --section-pad-bottom / --section-intro-measure / --section-intro-margin
+  style?: string; // per-call-site retuning hooks: --section-pad-bottom / --section-intro-measure / --section-intro-margin (defaults live in the var() fallbacks below)
 }
 
 const { title, number, id, rule = true, class: className, ...rest } = Astro.props;
@@ -30,48 +30,31 @@ const slug = id ?? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|
     border: 0;
     border-top: var(--border-1) solid var(--border-hair);
     margin: 0 auto; /* zero block margin overrides the UA <hr> default */
-    inline-size: calc(100% - 2 * var(--gutter-legacy-min));
-  }
-  @media (min-width: 48rem) {
-    .rule {
-      inline-size: calc(100% - 2 * var(--gutter-legacy-max));
-    }
+    inline-size: calc(100% - 2 * var(--gutter));
   }
 
   .section {
     counter-increment: section; /* base.css: body { counter-reset: section } */
     max-inline-size: var(--content-max);
     margin-inline: auto;
-    padding-block-start: var(--space-8);
-    padding-inline: var(--gutter-legacy-min);
-    padding-block-end: var(--section-pad-bottom, 0);
-  }
-  @media (min-width: 48rem) {
-    .section {
-      padding-block-start: var(--space-10);
-      padding-inline: var(--gutter-legacy-max);
-    }
+    padding-block: var(--space-10) var(--section-pad-bottom, var(--space-10));
+    padding-inline: var(--gutter);
   }
 
   .header {
     display: flex;
     align-items: baseline;
     gap: var(--space-3);
-    margin-block-end: var(--space-legacy-28);
+    margin-block-end: var(--space-7);
   }
   .number {
     font-family: var(--mono);
-    font-size: var(--text-legacy-number-sm);
+    font-size: var(--text-1);
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-legacy-number);
+    letter-spacing: var(--tracking-caps-1);
     color: var(--text-muted);
-    min-inline-size: var(--space-legacy-number-min);
-  }
-  @media (min-width: 48rem) {
-    .number {
-      font-size: var(--text-1);
-    }
+    min-inline-size: var(--space-10);
   }
   .number:empty::before {
     content: counter(section, decimal-leading-zero) ' /';
@@ -81,8 +64,8 @@ const slug = id ?? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|
     font-family: var(--serif);
     font-weight: 400;
     font-size: var(--text-d2);
-    line-height: var(--leading-legacy-title);
-    letter-spacing: var(--tracking-legacy-title);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
   }
   .intro {
     max-inline-size: var(--section-intro-measure, var(--measure));

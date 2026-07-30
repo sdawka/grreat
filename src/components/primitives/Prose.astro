@@ -1,8 +1,7 @@
 ---
 // Body copy — replaces the inline-styled intro paragraphs. `measure` applies
-// the shared prose-width token; callers that still need a legacy exact width
-// (pending Step 3's Section `intro` slot) pass `measure={false}` and size
-// themselves via `class`.
+// the shared prose-width token; callers that need a different width pass
+// `measure={false}` and size themselves via `class`.
 export interface Props {
   size?: 'body' | 'body-s';
   muted?: boolean;

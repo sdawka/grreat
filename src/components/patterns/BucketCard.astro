@@ -19,45 +19,44 @@ const { bucket, letter, name, desc, class: className, ...rest } = Astro.props;
 <style>
   .bucket-card {
     background: var(--surface-raised);
-    padding: var(--space-5) var(--gutter-legacy-min);
+    padding: var(--space-6);
     transition: background var(--duration-fast);
   }
   .bucket-card:active {
     background: var(--surface-page);
   }
 
-  /* data-bucket → --bucket remap, verbatim from legacy */
-  .bucket-card[data-bucket='goals'] { --bucket: var(--bucket-goals); }
-  .bucket-card[data-bucket='research'] { --bucket: var(--bucket-research); }
-  .bucket-card[data-bucket='roadmap'] { --bucket: var(--bucket-roadmap); }
-  .bucket-card[data-bucket='execution'] { --bucket: var(--bucket-execution); }
-  .bucket-card[data-bucket='analysis'] { --bucket: var(--bucket-analysis); }
-  .bucket-card[data-bucket='time'] { --bucket: var(--bucket-time); }
+  .bucket-card[data-bucket='goals'] { --bucket-accent: var(--bucket-goals); }
+  .bucket-card[data-bucket='research'] { --bucket-accent: var(--bucket-research); }
+  .bucket-card[data-bucket='roadmap'] { --bucket-accent: var(--bucket-roadmap); }
+  .bucket-card[data-bucket='execution'] { --bucket-accent: var(--bucket-execution); }
+  .bucket-card[data-bucket='analysis'] { --bucket-accent: var(--bucket-analysis); }
+  .bucket-card[data-bucket='time'] { --bucket-accent: var(--bucket-time); }
 
   .letter {
     display: block;
     font-family: var(--serif);
     font-size: var(--text-numeral);
-    line-height: var(--leading-legacy-bucket-letter);
-    letter-spacing: var(--tracking-legacy-bucket-letter);
-    color: var(--bucket);
-    margin-block-end: var(--space-legacy-6);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-display);
+    color: var(--bucket-accent);
+    margin-block-end: var(--space-2);
   }
 
   .name {
     display: block;
     font-weight: 600;
     font-size: var(--text-2);
-    line-height: var(--leading-legacy-bucket-name);
+    line-height: var(--leading-snug);
     text-transform: uppercase;
-    letter-spacing: var(--tracking-legacy-bucket-name);
+    letter-spacing: var(--tracking-caps-1);
     margin-block-end: var(--space-2);
   }
 
   .desc {
     margin: 0;
     font-size: var(--text-2);
-    line-height: var(--leading-legacy-bucket-desc);
+    line-height: var(--leading-relaxed);
     color: var(--text-muted);
   }
 </style>
