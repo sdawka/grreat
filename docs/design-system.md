@@ -425,3 +425,34 @@ Each PR deletes its legacy-layer block; screenshots must match Step 0 baseline.
 | `Switcher` primitive alongside container queries | Typecase | simpler mental model for plain row→column flips |
 | Button: no viewport query; `full` prop instead | judges 1 & 2 | fixes the proposal's own container-query doctrine violation |
 | "global.css is append-closed" rule + written Tailwind ADR | pragmatic-hybrid | one-line governance that outperforms linters |
+
+---
+
+## 8. Status (2026-07-30)
+
+Steps 0–6 are shipped (PRs #3–#7): legacy layer deleted, fonts self-hosted with
+metric-matched fallbacks, dark-mode toggle live, palette in oklch, guardrails in CI.
+The legacy-parity tokens (`--*-legacy-*`) have since been collapsed onto the
+canonical scales; the only named exceptions kept are `--text-input` (iOS 16px
+no-zoom floor), `--content-form` (34rem form/lede width), and `--grid-min-bucket`
+(18rem tile floor, preserves the 3/2/1-column breaks).
+
+Open items:
+
+- **No visual-regression harness in-repo.** Step 0's Playwright baseline was run
+  ad-hoc; screenshot diffing isn't wired into CI. Recipe: `npm run build &&
+  npx wrangler dev -c dist/server/wrangler.json` then full-page screenshots at
+  375/768/1280 (`astro dev` cannot render this site — workerd fails with a masked
+  "process is not defined").
+- **Dark mode** passed a screenshot review 2026-07-30 (375/768/1280, both themes,
+  before/after vs main; Python Playwright + cached Chromium are available locally) —
+  but there's still no automated pass in CI.
+- **Unused tokens:** `--duration-slow` has no consumer; `--surface-focus`'s
+  intended consumer (input focus background) was superseded by the global
+  `:focus-visible` ring decision — wire it or delete it on the next form work.
+- **Unwired primitives (by design):** `MicroLabel` and `Rule` are spec-inventory
+  primitives with no call sites; wiring them changes pixels, so they wait for
+  deliberate adoption.
+- **Section retuning hooks:** only `--section-intro-margin` is injected today;
+  `--section-pad-bottom` / `--section-intro-measure` are available but caller-less.
+- **App-surface components** (`PageShell`, `NavBar`, `Modal`) remain build-on-demand.

@@ -35,7 +35,7 @@ import { useCases } from '../../content/useCases';
   <div class="uc-stage" aria-live="off">
     {useCases.map((u) => (
       <div class="uc-panel">
-        <RuledGrid min="var(--grid-min-legacy-bucket)">
+        <RuledGrid min="var(--grid-min-bucket)">
           {buckets.map((b) => (
             <BucketCard bucket={b.bucket} letter={b.letter} name={b.name} desc={u.flavors[b.bucket]} />
           ))}

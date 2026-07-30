@@ -54,22 +54,22 @@ const { index, label, owner, class: className, ...rest } = Astro.props;
   }
 
   .index {
-    padding: var(--gutter-legacy-min);
+    padding: var(--space-5);
     border-inline-end: var(--border-1) solid var(--border-strong);
     font-family: var(--mono);
     font-size: var(--text-2);
-    letter-spacing: var(--tracking-legacy-number);
+    letter-spacing: var(--tracking-caps-1);
   }
   .index span {
     display: block;
     font-family: var(--serif);
     font-size: var(--text-numeral);
     line-height: var(--leading-none);
-    letter-spacing: var(--tracking-legacy-bucket-letter);
+    letter-spacing: var(--tracking-display);
   }
 
   .copy {
-    padding: var(--space-5) var(--space-legacy-highlight-copy-x);
+    padding: var(--space-5);
   }
 
   .copy .label,
@@ -84,13 +84,13 @@ const { index, label, owner, class: className, ...rest } = Astro.props;
     margin-block-start: var(--space-2);
     font-family: var(--serif);
     font-size: var(--text-d1);
-    line-height: var(--leading-legacy-highlight-action);
+    line-height: var(--leading-snug);
   }
 
   .ownership {
     grid-column: 1 / -1;
     border-block-start: var(--border-1) solid var(--border-strong);
-    padding: var(--gutter-legacy-min);
+    padding: var(--space-5);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -104,7 +104,9 @@ const { index, label, owner, class: className, ...rest } = Astro.props;
 
   @container (min-width: 34rem) {
     .grid {
-      grid-template-columns: var(--grid-legacy-highlight-index) minmax(0, 1fr) var(--grid-legacy-highlight-owner);
+      /* owner track is content-sized: a fixed track narrower than the
+         "OWNED BY" label wraps it and pins it to the card edge */
+      grid-template-columns: var(--space-11) minmax(0, 1fr) auto;
     }
     .index,
     .copy .label,

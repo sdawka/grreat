@@ -17,7 +17,7 @@ const {
 ---
 
 <Container as="footer" size="full" role="contentinfo" class:list={['colophon', className]} {...rest}>
-  <Cluster justify="between" align="start" gap="var(--space-legacy-6)" class="colophon-flex">
+  <Cluster justify="between" align="start" gap={2} class="colophon-flex">
     <span>GRREAT / THE WORKING EDITION</span>
     <span>OPEN SYSTEM — MARKDOWN IS THE SOURCE OF TRUTH</span>
     <span>GIT VERSIONED · NO PROPRIETARY FORMATS</span>
@@ -39,20 +39,18 @@ const {
      import) decides. Same reasoning applies to Cluster/.colophon-flex below. */
   :global(.container.colophon) {
     inline-size: 100%;
-    padding-inline: var(--gutter-legacy-min);
-    padding-block: var(--space-legacy-10);
+    padding-inline: var(--gutter);
+    padding-block: var(--space-4);
     border-block-start: var(--border-1) solid var(--border-strong);
     font-family: var(--mono);
-    font-size: var(--text-2); /* 12px — legacy mobile micro-type floor */
+    font-size: var(--text-1);
     text-transform: uppercase;
-    letter-spacing: var(--tracking-legacy-caps-3);
+    letter-spacing: var(--tracking-caps-1);
     color: var(--text-muted);
   }
   @media (min-width: 48rem) {
     :global(.container.colophon) {
-      padding-inline: var(--gutter-legacy-max);
-      padding-block: var(--space-legacy-11);
-      font-size: var(--text-1); /* legacy desktop value is 8px; floored, accepted deviation */
+      padding-inline: var(--gutter);
     }
   }
 
